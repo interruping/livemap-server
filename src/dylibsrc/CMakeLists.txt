@@ -1,0 +1,31 @@
+
+# 출력 디렉토리
+set ( LIVEMAP_SERVER_OUTPUT_DIR "" )
+
+if (WIN32)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+elseif (CMAKE_COMPILER_IS_GNUCC)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+elseif(APPLE)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+endif (WIN32)
+
+# set output parth
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR}/dylib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
+
+# for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR}/dylib )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+include_directories ( ../header )
+add_compile_options ( -W -Wall -std=c++14 )
+
+#빌드 플러그인 라이브러리 
+add_library ( commandbinder SHARED solarcode_livemap_libcommandbinder.cpp )
+set_property(TARGET commandbinder PROPERTY POSITION_INDEPENDENT_CODE ON)

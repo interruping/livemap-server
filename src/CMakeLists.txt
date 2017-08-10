@@ -1,0 +1,91 @@
+#build type convert to lower
+
+if(DEFINED CMAKE_BUILD_TYPE)
+    string ( TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE )
+else ()
+    set( CMAKE_BUILD_TYPE debug)
+endif(DEFINED CMAKE_BUILD_TYPE)
+
+#플러그인 라이브러리
+add_subdirectory( dylibsrc )
+
+#OpenSSL Setting
+
+if ( APPLE )
+    set (OPENSSL_ROOT_DIR /usr/local/opt/openssl )
+    set (OPENSSL_INCLUDE_DIR /usr/local/opt/openssl/include )
+    set (OPENSSL_LIBRARY_DIR /usr/local/opt/openssl/lib )
+    set (OPENSSL_LIBRARIES "")
+    link_libraries( ssl crypto )
+endif( APPLE )
+
+find_package (openssl REQUIRED)
+
+if ( OpenSSL_FOUND )
+
+    include_directories ( ${OPENSSL_INCLUDE_DIR} )
+    link_directories( ${OPENSSL_LIBRARY_DIR} )
+
+
+else ()
+    #Error;with REQUIRED, pkg_search_module() will throw an error by it's own
+endif (OpenSSL_FOUND)
+
+
+# 공통 헤더 파일 Include 디렉토리 (-I)
+include_directories ( header )
+
+# 빌드 대상 바이너리 파일명 및 소스 파일 목록
+set ( OUTPUT_ELF
+        "server"
+        )
+file ( GLOB LIVEMAP_CXX_SOURCES *.cpp )
+ 
+# 공통 컴파일 옵션, 링크 옵션
+add_compile_options ( -W -Wall -std=c++14 )
+#set ( CMAKE_EXE_LINKER_FLAGS "<링크_옵션> <링크_옵션> ..." )
+ 
+# 공통 링크 라이브러리 (-l)
+link_libraries ( dl )
+
+#Boost Library Setting
+
+find_package ( Boost 1.60 COMPONENTS system thread REQUIRED )
+include_directories( ${Boost_INCLUDE_DIR} )
+
+# "debug" 형상 한정 컴파일 옵션, 링크 옵션
+set ( CMAKE_CXX_FLAGS_DEBUG "-o0 -g -D_DEBUG_" )
+set ( CMAKE_EXE_LINKER_FLAGS_DEBUG "-g" )
+ 
+# "release" 형상 한정 컴파일 옵션, 링크 옵션
+set ( CMAKE_CXX_FLAGS_RELEASE "" )
+set ( CMAKE_EXE_LINKER_FLAGS_RELEASE "" )
+    
+# 출력 디렉토리
+set ( LIVEMAP_SERVER_OUTPUT_DIR "" )
+
+if (WIN32)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+elseif (CMAKE_COMPILER_IS_GNUCC)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+elseif(APPLE)
+    set(LIVEMAP_SERVER_OUTPUT_DIR ${livemap_server_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE}/)
+endif (WIN32)
+
+# set output parth
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR}/dylib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
+
+# for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR}/dylib )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+
+# 빌드 대상 바이너리 추가
+add_executable( ${OUTPUT_ELF} ${LIVEMAP_CXX_SOURCES} )
+target_link_libraries ( ${OUTPUT_ELF} LINK_PUBLIC ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} )
