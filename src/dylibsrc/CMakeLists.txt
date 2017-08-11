@@ -15,6 +15,12 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR}/dylib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIVEMAP_SERVER_OUTPUT_DIR} )
 
+# 빌드 대상 바이너리 파일명 및 소스 파일 목록
+file (GLOB_RECURSE LIVEMAP_C_HEADERS  "*.h")
+file (GLOB_RECURSE LIVEMAP_CXX_HEADERS  "*.hpp")
+set ( LIVEMAP_INCLUDE_HEADERS ${LIVEMAP_C_HEADERS} ${LIVEMAP_CXX_HEADERS} )
+file ( GLOB LIVEMAP_CXX_SOURCES *.cpp )
+
 # for multi-config builds (e.g. msvc)
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
@@ -26,6 +32,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 include_directories ( ../header )
 add_compile_options ( -W -Wall -std=c++14 )
 
+
 #빌드 플러그인 라이브러리 
-add_library ( commandbinder SHARED solarcode_livemap_libcommandbinder.cpp )
+add_library ( commandbinder SHARED ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_INCLUDE_HEADERS} )
 set_property(TARGET commandbinder PROPERTY POSITION_INDEPENDENT_CODE ON)

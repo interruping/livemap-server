@@ -31,16 +31,19 @@ else ()
     #Error;with REQUIRED, pkg_search_module() will throw an error by it's own
 endif (OpenSSL_FOUND)
 
-
-# 공통 헤더 파일 Include 디렉토리 (-I)
-include_directories ( header )
-
 # 빌드 대상 바이너리 파일명 및 소스 파일 목록
 set ( OUTPUT_ELF
         "server"
         )
+file (GLOB_RECURSE LIVEMAP_C_HEADERS  "header/*.h")
+file (GLOB_RECURSE LIVEMAP_CXX_HEADERS  "header/*.hpp")
+set ( LIVEMAP_INCLUDE_HEADERS ${LIVEMAP_C_HEADERS} ${LIVEMAP_CXX_HEADERS} )
+
 file ( GLOB LIVEMAP_CXX_SOURCES *.cpp )
- 
+
+# 공통 헤더 파일
+include_directories( header )
+
 # 공통 컴파일 옵션, 링크 옵션
 add_compile_options ( -W -Wall -std=c++14 )
 #set ( CMAKE_EXE_LINKER_FLAGS "<링크_옵션> <링크_옵션> ..." )
@@ -87,5 +90,6 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 
 # 빌드 대상 바이너리 추가
-add_executable( ${OUTPUT_ELF} ${LIVEMAP_CXX_SOURCES} )
+add_executable (${OUTPUT_ELF} ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_INCLUDE_HEADERS})
+
 target_link_libraries ( ${OUTPUT_ELF} LINK_PUBLIC ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} )
