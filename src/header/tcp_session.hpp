@@ -10,9 +10,9 @@
 #ifndef SOLARCODE_LIVEMAP_TCP_SESSION
 #define SOLARCODE_LIVEMAP_TCP_SESSION
 
-#include "solarcode_debug_utility.hpp"
-#include "solarcode_tcp_server.hpp"
-#include "solarcode_query_interpreter.hpp"
+#include "debug_utility.hpp"
+#include "tcp_server.hpp"
+#include "query_interpreter.hpp"
 
 #include <memory>
 #include <functional>

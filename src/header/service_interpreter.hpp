@@ -6,8 +6,8 @@
 @data 2017. 03. 04
 @version 0.0.1
 */
-#ifndef SOLARCODE_LIVEMAP_QUERY_INTERPRETER
-#define SOLARCODE_LIVEMAP_QUERY_INTERPRETER
+#ifndef SOLARCODE_LIVEMAP_SERVICE_INTERPRETER
+#define SOLARCODE_LIVEMAP_SERVICE_INTERPRETER
 
 #include "solarcode_id_manager.hpp"
 #include "solarcode_livemap_node_database.hpp"
@@ -22,13 +22,13 @@ namespace livemap {
     @class query_interpreter_delegate
     @breif 쿼리 해석 클래스 델리게이트 클래스.
     @detail n/a.
-    @namespace solarcode::livemap::query_interpreter_delegate
+    @namespace solarcode::livemap::service_interpreter_delegate
     @see 
     */
     template <typename user_id_type>
-    class query_interpreter_delegate {
+    class service_interpreter_delegate {
     public:
-    virtual void complete_query_answering(user_id_type user_id, const char *const query_result, std::size_t query_result_size) = 0;
+    virtual void complete_interprete(user_id_type user_id, const char *const query_result, std::size_t query_result_size) = 0;
     };
     
     /*!
@@ -39,9 +39,11 @@ namespace livemap {
     @see 
     */
     template <typename user_id_type>
-    class query_interpreter {
+    class service_interpreter {
     public:
-    virtual void query_request(user_id_type user_id, const char * const raw_query, const std::size_t raw_query_size) = 0;
+    virtual void request_interprete(user_id_type user_id, const char * const raw_query, const std::size_t raw_query_size) = 0;
+        
+        virtual void register_delegate(user_id_type delegate_id,service_interpreter_delegate<user_id_type> *delegate) = 0;
     };
 }
 }
@@ -51,12 +53,12 @@ namespace livemap {
     /*!
     @breif 라이브맵 쿼리 해석자 베이스 타입
     */
-    using livemap_query_interpreter_base = query_interpreter<common_id_type>;
+    using livemap_query_interpreter_base = service_interpreter<common_id_type>;
     
     /*!
     @breif 라이브맵 쿼리 해석자 델리게이트 타입
     */
-    using livemap_query_interpreter_delegate = query_interpreter_delegate<common_id_type>;
+    using livemap_query_interpreter_delegate = service_interpreter_delegate<common_id_type>;
 
     /*!
     @class livemap_query_interpreter

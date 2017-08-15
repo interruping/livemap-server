@@ -109,7 +109,7 @@ namespace livemap {
 
 			std::memcpy( tmp_buffer, query_result + index, actual_buffer_size );
 
-			new_result_commands.push(std::move(std::make_unique<command_form_base>(tmp_buffer)));
+			new_result_commands.push(std::make_unique<command_form_base>(tmp_buffer));
 
 			delete[] tmp_buffer;
 

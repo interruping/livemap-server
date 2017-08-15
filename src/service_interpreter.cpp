@@ -1,4 +1,4 @@
-#include "solarcode_query_interpreter.hpp"
+#include "solarcode_service_interpreter.hpp"
 #include "solarcode_command_binder.hpp"
 
 #include <stdint.h>
