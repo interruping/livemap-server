@@ -10,7 +10,7 @@
 #ifndef SRC_HEADER_SOLARCODE_COMMAND_BINDER_HPP_
 #define SRC_HEADER_SOLARCODE_COMMAND_BINDER_HPP_
 
-#include "solarcode_livemap_node_database.hpp"
+#include "node_database.hpp"
 
 #include <vector>
 

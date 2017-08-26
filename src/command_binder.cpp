@@ -6,7 +6,7 @@
  @date Apr 1, 2017
  @version
 */
-#include "solarcode_command_binder.hpp"
+#include "command_binder.hpp"
 
 
 #include <stdint.h>

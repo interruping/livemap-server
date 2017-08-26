@@ -1,13 +1,15 @@
 
-#include "solarcode_id_manager.hpp"
+#ifndef SOLARCODE_LIVEMAP_CLIENT_NODE
+#define SOLARCODE_LIVEMAP_CLIENT_NODE
+
+
+#include "id_manager.hpp"
 
 #include <stdint.h>
 
 #include <set>
 #include <string>
 
-#ifndef SOLARCODE_LIVEMAP_CLIENT_NODE
-#define SOLARCODE_LIVEMAP_CLIENT_NODE
 
 namespace solarcode {
 namespace livemap {

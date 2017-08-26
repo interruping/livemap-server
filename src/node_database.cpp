@@ -6,7 +6,7 @@
  @date Mar 24, 2017
  @version
 */
-#include "solarcode_livemap_node_database.hpp"
+#include "node_database.hpp"
 
 namespace solarcode {
 namespace livemap {

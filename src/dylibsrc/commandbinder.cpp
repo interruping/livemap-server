@@ -7,7 +7,7 @@
  @version
 */
 
-#include "solarcode_livemap_libcommandbinder.hpp"
+#include "commandbinder.hpp"
 
 #include <cstring>
 

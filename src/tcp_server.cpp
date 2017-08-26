@@ -7,8 +7,8 @@
 @version 0.0.1
 */
 
-#include "solarcode_tcp_server.hpp"
-#include "solarcode_debug_utility.hpp"
+#include "tcp_server.hpp"
+#include "debug_utility.hpp"
 
 #include <cstdlib>
 

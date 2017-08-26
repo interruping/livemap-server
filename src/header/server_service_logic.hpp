@@ -17,10 +17,10 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "solarcode_debug_utility.hpp"
-#include "solarcode_tcp_server.hpp"
-#include "solarcode_id_manager.hpp"
-#include "solarcode_query_interpreter.hpp"
+#include "debug_utility.hpp"
+#include "tcp_server.hpp"
+#include "id_manager.hpp"
+#include "service_interpreter.hpp"
 
 namespace solarcode {
 namespace livemap {

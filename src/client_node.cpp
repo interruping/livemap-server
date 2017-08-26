@@ -1,8 +1,8 @@
 #ifdef _DEBUG_
-#include "solarcode_debug_utility.hpp"
+#include "debug_utility.hpp"
 #endif
 
-#include "solarcode_livemap_client_node.hpp"
+#include "client_node.hpp"
 #include <iostream>
 #include <memory.h>
 

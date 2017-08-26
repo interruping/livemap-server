@@ -14,10 +14,10 @@
 
 #include <boost/asio.hpp>
 
-#include "solarcode_tcp_session.hpp"
-#include "solarcode_id_manager.hpp"
-#include "solarcode_query_interpreter.hpp"
-#include "solarcode_livemap_command_form.hpp"
+#include "tcp_session.hpp"
+#include "id_manager.hpp"
+#include "service_interpreter.hpp"
+#include "command_form.hpp"
 
 namespace solarcode {
 namespace livemap {
@@ -89,7 +89,7 @@ namespace livemap {
          */
         virtual void end_managing();
         //inherit from livemap_query_interpreter
-        virtual void complete_query_answering(common_id_type user_id, const char *const query_result, std::size_t query_result_size);
+        virtual void complete_interprete(common_id_type user_id, const char *const query_result, std::size_t query_result_size);
 
     private:
         /*!

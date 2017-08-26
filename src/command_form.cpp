@@ -6,7 +6,7 @@
 @data 2017. 03. 09.
 @version 0.0.1
 */
-#include "solarcode_livemap_command_form.hpp"
+#include "command_form.hpp"
 namespace solarcode {
 namespace livemap {
 

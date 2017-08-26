@@ -7,12 +7,13 @@
  @version
 */
 
-#include "solarcode_livemap_service_command.hpp"
-#include "solarcode_livemap_node_database.hpp"
+
 
 #ifndef SRC_HEADER_SOLARCODE_LIVEMAP_LIBCOMMANDBINDER_HPP_
 #define SRC_HEADER_SOLARCODE_LIVEMAP_LIBCOMMANDBINDER_HPP_
 
+#include "service_command.hpp"
+#include "node_database.hpp"
 
 extern "C"{
 

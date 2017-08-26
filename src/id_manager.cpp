@@ -6,7 +6,7 @@
 @data 2017. 02. 19
 @version 0.0.1
 */
-#include "solarcode_id_manager.hpp"
+#include "id_manager.hpp"
 
 namespace solarcode {
 namespace livemap {

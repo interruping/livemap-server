@@ -6,9 +6,9 @@
 @data 2017. 02. 19
 @version 0.0.1
 */
-#include "solarcode_server_service_logic.hpp"
-#include "solarcode_tcp_session.hpp"
-#include "solarcode_session_io_manager.hpp"
+#include "server_service_logic.hpp"
+#include "tcp_session.hpp"
+#include "session_io_manager.hpp"
 
 #include <mutex>
 #include <iostream>

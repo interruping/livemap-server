@@ -1,5 +1,5 @@
-#include "solarcode_service_interpreter.hpp"
-#include "solarcode_command_binder.hpp"
+#include "service_interpreter.hpp"
+#include "command_binder.hpp"
 
 #include <stdint.h>
 
@@ -9,7 +9,7 @@ namespace livemap {
     /*!
     @breif 질의를 해석해서 요청에 맞는 응답을 전달하는 구현
     */
-    void livemap_query_interpreter::query_request(common_id_type user_id, const char *const raw_query, const std::size_t raw_query_size)
+    void livemap_query_interpreter::request_interprete(common_id_type user_id, const char *const raw_query, const std::size_t raw_query_size)
     {
     	char *const release_manual_buffer = new char[raw_query_size];
 
@@ -29,7 +29,7 @@ namespace livemap {
     		_io_service.post(
     		new_strand_for_delegate.wrap(
     		[delegate_will_receive_result, user_id, result_size, result_buffer](){
-    			delegate_will_receive_result->complete_query_answering(user_id, result_buffer,result_size );
+    			delegate_will_receive_result->complete_interprete(user_id, result_buffer,result_size );
     			delete[] result_buffer;
     		}
     		)

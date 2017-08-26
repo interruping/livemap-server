@@ -4,8 +4,8 @@
 
 
 
-#include "solarcode_livemap_command_form.hpp"
-#include "solarcode_livemap_client_node.hpp"
+#include "command_form.hpp"
+#include "client_node.hpp"
 
 namespace solarcode {
 namespace livemap {

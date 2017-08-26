@@ -13,8 +13,8 @@
 #include <functional>
 #include <mutex>
 
-#include "solarcode_id_manager.hpp"
-#include "solarcode_livemap_client_node.hpp"
+#include "id_manager.hpp"
+#include "client_node.hpp"
 
 namespace solarcode {
 namespace livemap {

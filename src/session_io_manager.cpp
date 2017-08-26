@@ -6,7 +6,7 @@
 @data 2017. 03. 04
 @version 0.0.1
 */
-#include "solarcode_session_io_manager.hpp"
+#include "session_io_manager.hpp"
 
 
 namespace solarcode {
@@ -37,7 +37,7 @@ namespace livemap {
     */
     void livemap_session_io_manager::readbyte(char *const buffer, const std::size_t buffer_length)
     {
-    	_shared_query_interpreter.query_request(get_id(), buffer, buffer_length);
+    	_shared_query_interpreter.request_interprete(get_id(), buffer, buffer_length);
         
         
     }
@@ -77,7 +77,7 @@ namespace livemap {
     /*!
      @breif 쿼리 해석자 쿼리 요청 완료 후 호출되는 위임 함수.
      */
-    void livemap_session_io_manager::complete_query_answering(common_id_type user_id, const char *const query_result, std::size_t query_result_size)
+    void livemap_session_io_manager::complete_interprete(common_id_type user_id, const char *const query_result, std::size_t query_result_size)
     {
     	std::unique_lock<std::mutex> command_cache_lock(_command_cache_mutex);
     	if ( _command_cache.empty() == false ) {

@@ -9,56 +9,27 @@
 #ifndef SOLARCODE_LIVEMAP_SERVICE_INTERPRETER
 #define SOLARCODE_LIVEMAP_SERVICE_INTERPRETER
 
-#include "solarcode_id_manager.hpp"
-#include "solarcode_livemap_node_database.hpp"
+#include "interpreter_base.h"
+#include "id_manager.hpp"
+#include "node_database.hpp"
 
 #include <mutex>
 
 #include <boost/asio.hpp>
 
-namespace solarcode {
-namespace livemap {
-    /*!
-    @class query_interpreter_delegate
-    @breif 쿼리 해석 클래스 델리게이트 클래스.
-    @detail n/a.
-    @namespace solarcode::livemap::service_interpreter_delegate
-    @see 
-    */
-    template <typename user_id_type>
-    class service_interpreter_delegate {
-    public:
-    virtual void complete_interprete(user_id_type user_id, const char *const query_result, std::size_t query_result_size) = 0;
-    };
-    
-    /*!
-    @class query_interpreter
-    @breif 쿼리 해석 클래스.
-    @detail n/a.
-    @namespace solarcode::livemap::query_interpreter
-    @see 
-    */
-    template <typename user_id_type>
-    class service_interpreter {
-    public:
-    virtual void request_interprete(user_id_type user_id, const char * const raw_query, const std::size_t raw_query_size) = 0;
-        
-        virtual void register_delegate(user_id_type delegate_id,service_interpreter_delegate<user_id_type> *delegate) = 0;
-    };
-}
-}
+
 
 namespace solarcode {
 namespace livemap {
     /*!
     @breif 라이브맵 쿼리 해석자 베이스 타입
     */
-    using livemap_query_interpreter_base = service_interpreter<common_id_type>;
+    using livemap_query_interpreter_base = interpreter_base<common_id_type>;
     
     /*!
     @breif 라이브맵 쿼리 해석자 델리게이트 타입
     */
-    using livemap_query_interpreter_delegate = service_interpreter_delegate<common_id_type>;
+    using livemap_query_interpreter_delegate = interpreter_base_delegate<common_id_type>;
 
     /*!
     @class livemap_query_interpreter
@@ -82,7 +53,7 @@ namespace livemap {
         {
             
         }
-       virtual void query_request(common_id_type user_id, const char *const raw_query, const std::size_t raw_query_size);
+       virtual void request_interprete(common_id_type user_id, const char *const raw_query, const std::size_t raw_query_size);
         /*!
         @breif 델리게이트 등록 매서드
         @param delegate
