@@ -49,23 +49,23 @@ class server_base {
 public:
     
     virtual ~server_base () {};
-    virtual void* get_new_instance() = 0;
+
     
     /*!
-     @breif 클라이언 연결요청 accept 작업을 실행하는 동작을 구현할 매서드.
+     \breif 클라이언 연결요청 accept 작업을 실행하는 동작을 구현할 매서드.
      */
-    virtual void start_accept() = 0;
+    virtual void start_service() = 0;
     /*!
-     @breif accept 작업을 종료하는 동작을 구현할 매서드.
+     \breif accept 작업을 종료하는 동작을 구현할 매서드.
      */
-    virtual void stop_accept() = 0;
+    virtual void stop_service() = 0;
     /*!
      @breif delegate 객체를 설정하는 함수.
      @param delegate delegate 객체 (약한 참조)
      */
     virtual void set_delegate(server_service_delegate* delegate)
     {
-        _delegate = delegate;
+        _delegate.reset(delegate);
     }
     /*!
      @brief delegate 객체를 가져오는 함수
@@ -73,11 +73,12 @@ public:
      */
     virtual server_service_delegate* get_delegate() const
     {
-        return _delegate;
+        return _delegate.get();
     }
     
     typedef std::function<std::shared_ptr<void>(std::shared_ptr<void>)> session_builder_type;
     
+    virtual session_builder_type get_session_builder () const = 0;
 protected:
     /*!
      @breif 생성자 (자식에서 만 호출가능)
@@ -85,12 +86,11 @@ protected:
     server_base() = default;
     
 private:
-    
-    virtual session_builder_type get_session_builder () = 0;
+
     /*!
      @breif delegate 객체 멤버 포인터
      */
-    server_service_delegate *_delegate;
+    std::unique_ptr<server_service_delegate> _delegate;
 };
 
 }
