@@ -14,8 +14,11 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
+#include <boost/thread.hpp>
 
 #include <memory>
+
+
 
 namespace solarcode {
 namespace livemap {
@@ -37,9 +40,7 @@ namespace livemap {
         /*!
          @breif 소멸자
          */
-        virtual ~ssl_tcp_server_boost_impl(){}
-        
-        
+        virtual ~ssl_tcp_server_boost_impl();
         //base_server 메서드 오버라이딩.
         //스레드 세이프 함.
         virtual void start_service();
@@ -89,6 +90,11 @@ namespace livemap {
          @breif accept delegate 핸들러 처리 스레드 동기화를 위한 strand
          */
         boost::asio::strand _strand_for_acceptor_handler;
+        
+        /*!
+         \breif io_service 스레드 그룹
+        */
+        boost::thread_group _thread_group;
     };
 
     

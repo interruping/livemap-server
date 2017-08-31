@@ -15,11 +15,11 @@
 
 namespace solarcode {
 namespace livemap {
-    class ssl_tcp_server : server_base {
+    class ssl_tcp_server : public server_base {
     public:
         ssl_tcp_server();
         
-        virtual void start_accept()  {
+        virtual void start_service()  {
             _pimple->start_service();
         }
         virtual void stop_service() {

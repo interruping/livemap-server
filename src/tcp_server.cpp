@@ -8,14 +8,15 @@
 */
 
 #include "tcp_server.hpp"
-
+#include "ssl_tcp_server_boost_impl.hpp"
 
 namespace solarcode {
 namespace livemap {
     ssl_tcp_server::ssl_tcp_server()
     :server_base(),
-    _pimple()
+    _pimple(nullptr)
     {
+        _pimple.reset(new ssl_tcp_server_boost_impl());
         
     }
 }

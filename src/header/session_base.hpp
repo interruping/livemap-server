@@ -10,8 +10,8 @@
 #define session_base_h
 
 #include "debug_utility.hpp"
-#include "tcp_server.hpp"
-#include "service_interpreter.hpp"
+//#include "tcp_server.hpp"
+//#include "service_interpreter.hpp"
 
 #include <memory>
 #include <functional>
@@ -30,6 +30,7 @@ namespace solarcode {
          */
         class session_io_delegate {
         public:
+            virtual ~session_io_delegate() {};
             virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length) = 0;
             virtual void session_write_before_buffer(char *const buffer, const std::size_t buffer_length) = 0;
         };
@@ -87,7 +88,7 @@ namespace solarcode {
 #ifdef _DEBUG_
                 SC_DBGMSG("session_io_delegate set.");
 #endif
-                _delegate = delegate;
+                _delegate.reset(delegate);
             }
             /*!
              @breif 델리게이트를 설정하는 getter.
@@ -98,7 +99,7 @@ namespace solarcode {
 #ifdef _DEBUG_
                 SC_DBGMSG("session_io_delegate get.");
 #endif
-                return _delegate;
+                return _delegate.get();
             }
             
             /*!
@@ -129,7 +130,7 @@ namespace solarcode {
             /*!
              @breif 델리게이트 포인터
              */
-            session_io_delegate *_delegate;
+            std::unique_ptr<session_io_delegate> _delegate;
             /*!
              @breif 세션 만료 콜백
              */

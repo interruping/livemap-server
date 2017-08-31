@@ -20,7 +20,7 @@ namespace livemap {
     public:
         ssl_tcp_session(std::shared_ptr<void> socket);
         
-        virtual ~ssl_tcp_session();
+        virtual ~ssl_tcp_session(){}
         
         virtual void start() {
             _pimple->start();

@@ -59,11 +59,25 @@ namespace livemap{
     _context(boost::asio::ssl::context::tlsv12), //ssl 셋팅 초기화
     _is_stopped_accept(false), //stop 플래그 초기화 default false.
     _strand_for_acceptor(_ios), //스레드 동기화를 위한 strand 초기화 (for acceptor)
-    _strand_for_acceptor_handler(_ios) // 스레드 동기화를 위한 strand 초기화 (for accept handler)
+    _strand_for_acceptor_handler(_ios), // 스레드 동기화를 위한 strand 초기화 (for accept handler)
+    _thread_group() //스레드 그룹 초기화
     {
 #ifdef _DEBUG_
         SC_DBGMSG("n/a.");
 #endif
+        
+        uint32_t thread_num = 1;
+        
+        for ( uint32_t count = 0; count < thread_num; count++ ){
+            auto ios_runner = [this](){
+                _ios.run();
+            };
+            
+            _thread_group.create_thread(ios_runner);
+        }
+        
+        
+        
         //ssl 셋팅.
         _context.set_options(
                              boost::asio::ssl::context::default_workarounds |
@@ -72,6 +86,10 @@ namespace livemap{
         _context.use_certificate_chain_file("server.crt");
         _context.use_private_key_file("server.key", boost::asio::ssl::context::pem);
         _context.use_tmp_dh_file("dh512.pem");
+    }
+    
+    ssl_tcp_server_boost_impl::~ssl_tcp_server_boost_impl() {
+        _thread_group.join_all();
     }
     
     /*!
@@ -142,10 +160,7 @@ namespace livemap{
     server_base::session_builder_type ssl_tcp_server_boost_impl::get_session_builder() const
     {
         session_builder_type session_builder = [](std::shared_ptr<void> socket) {
-            std::shared_ptr<bst_ssl_tcp_socket> c_socket = std::static_pointer_cast<bst_ssl_tcp_socket>(socket);
-
-            
-            return socket;
+            return std::make_shared<ssl_tcp_session>(socket);
         };
         
         return session_builder;
