@@ -48,7 +48,7 @@ namespace livemap {
         
         
     private:
-        std::unique_ptr<session_base> _pimple;
+        std::shared_ptr<session_base> _pimple;
     };
     
     

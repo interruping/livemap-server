@@ -54,7 +54,8 @@ namespace livemap{
      */
     ssl_tcp_server_boost_impl::ssl_tcp_server_boost_impl()
     :server_base(), //부모 초기화
-    _ios(get_shared_io_service()), //boost io_service 초기화
+    _ios(get_shared_io_service()),//boost io_service 초기화
+    _work(_ios),
     _acceptor(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1212)), //boost acceptor 최화
     _context(boost::asio::ssl::context::tlsv12), //ssl 셋팅 초기화
     _is_stopped_accept(false), //stop 플래그 초기화 default false.
@@ -66,18 +67,6 @@ namespace livemap{
         SC_DBGMSG("n/a.");
 #endif
         
-        uint32_t thread_num = 1;
-        
-        for ( uint32_t count = 0; count < thread_num; count++ ){
-            auto ios_runner = [this](){
-                _ios.run();
-            };
-            
-            _thread_group.create_thread(ios_runner);
-        }
-        
-        
-        
         //ssl 셋팅.
         _context.set_options(
                              boost::asio::ssl::context::default_workarounds |
@@ -85,7 +74,22 @@ namespace livemap{
                              boost::asio::ssl::context::single_dh_use );
         _context.use_certificate_chain_file("server.crt");
         _context.use_private_key_file("server.key", boost::asio::ssl::context::pem);
-        _context.use_tmp_dh_file("dh512.pem");
+        _context.use_tmp_dh_file("dh2048.pem");
+        
+        uint32_t thread_num = 1;
+        
+        for ( uint32_t count = 0; count < thread_num; count++ ){
+            auto ios_runner = [this](){
+                _ios.run();
+                printf("ssss");
+            };
+            
+            _thread_group.create_thread(ios_runner);
+        }
+        
+        
+        
+
     }
     
     ssl_tcp_server_boost_impl::~ssl_tcp_server_boost_impl() {

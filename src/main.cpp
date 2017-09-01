@@ -17,6 +17,7 @@ int main() {
     server->set_delegate(new echo_service_logic());
     
     server->start_service();
+    delete server;
     
     return 0;
 }

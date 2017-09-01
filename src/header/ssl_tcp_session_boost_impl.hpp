@@ -84,6 +84,7 @@ namespace livemap {
          @breif 부스트 asio 참조
          */
         boost::asio::io_service &_io_service;
+        
         /*!
          @breif 세션 만료시 후작업을 위한 콜백
          */

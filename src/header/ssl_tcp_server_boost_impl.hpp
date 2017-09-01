@@ -70,6 +70,8 @@ namespace livemap {
          @breif io_service 객체
          */
         boost::asio::io_service& _ios;
+        
+        boost::asio::io_service::work _work;
         /*!
          @breif 부스트 asio acceptor
          */

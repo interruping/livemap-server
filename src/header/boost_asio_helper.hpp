@@ -14,15 +14,7 @@
 
 namespace solarcode {
 namespace livemap {
-    boost::asio::io_service& get_shared_io_service() {
-        static boost::asio::io_service *shared_ios = nullptr;
-            
-        if ( shared_ios == nullptr ) {
-            shared_ios = new boost::asio::io_service();
-        }
-            
-        return *shared_ios;
-    }
+    boost::asio::io_service& get_shared_io_service();
     
     typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> bst_ssl_tcp_socket;
 }

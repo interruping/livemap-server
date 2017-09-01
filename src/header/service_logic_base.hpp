@@ -25,7 +25,9 @@ namespace livemap {
         virtual void handle_accept(std::shared_ptr<void> socket) = 0;
         virtual void error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error) = 0;
     protected:
-        service_logic_base() {
+        service_logic_base()
+        :server_service_delegate()
+        {
             
         }
     };

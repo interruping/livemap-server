@@ -20,7 +20,8 @@ namespace livemap {
             SC_DBGMSG("session start.");
 #endif
             auto safe_start
-            = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::_unsafe_start, shared_from_this()));
+            = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::_unsafe_start,
+                                                   shared_from_this()));
             
             _io_service.post(safe_start);
             
@@ -108,7 +109,7 @@ namespace livemap {
                 char tmp_raw_buffer[buffer_length] = {0,};
                 
                 boost::system::error_code error;
-                std::size_t length = socket->read_some(boost::asio::buffer(tmp_raw_buffer), error);
+                std::size_t length = socket->read_some(boost::asio::buffer(tmp_raw_buffer, buffer_length), error);
                 
                 session_io_delegate *io_delegate = get_delegate();
                 
