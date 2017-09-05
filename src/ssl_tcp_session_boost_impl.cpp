@@ -140,17 +140,25 @@ namespace livemap {
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
-                static const std::size_t buffer_length = 512;
-                
-                char tmp_raw_buffer[buffer_length] = {0,};
+//                static const std::size_t buffer_length = 512;
+//                
+//                char tmp_raw_buffer[buffer_length] = {0,};
                 
                 session_io_delegate *io_delegate = get_delegate();
                 
+                std::size_t size_of_data_to_write = 0;
+                
+                char *buffer = nullptr;
                 if ( io_delegate != nullptr ) {
-                    io_delegate->session_write_before_buffer( tmp_raw_buffer, buffer_length);
+                    size_of_data_to_write = io_delegate->session_write_before_buffer(&buffer);
                 }
                 
-                socket->write_some(boost::asio::buffer(tmp_raw_buffer, buffer_length));
+                if ( buffer != nullptr ) {
+                    delete[] buffer;
+                }
+                
+                boost::system::error_code error;
+                socket->write_some(boost::asio::buffer(buffer, size_of_data_to_write), error);
                 
                 auto safe_wait_read
                 = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,

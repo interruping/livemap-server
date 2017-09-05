@@ -71,6 +71,7 @@ namespace livemap{
 	{
 		static std::chrono::system_clock::time_point lastest_dynamic_load
 			   = std::chrono::system_clock::time_point(std::chrono::seconds(0));
+        
 		static char lib_sha_hash[SHA_DIGEST_LENGTH] = {0,};
 		static void* handle = nullptr;
 		static command_binder_type do_bind_command = nullptr;

@@ -17,7 +17,15 @@
 namespace solarcode {
 namespace livemap {
 
-	static const char * const COMMAND_BINDER_LIB_PATH = "./lib/libcommandbinder.so";
+	static const char * const COMMAND_BINDER_LIB_PATH
+#ifdef __APPLE__
+    = "./lib/libcommandbinder.dylib";
+#elif __linux
+    = "./lib/libcommandbinder.so";
+#elif __unix
+    = "./lib/libcommandbinder.so";
+#endif
+    
 	static const char * const GO_BIND_COMMAND_SYMBOL = "do_bind_command";
 
 	using command_binder_type = std::size_t(*)(livemap_node_database&, const char *const, const std::size_t, const char**);

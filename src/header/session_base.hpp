@@ -32,7 +32,7 @@ namespace solarcode {
         public:
             virtual ~session_io_delegate() {};
             virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length) = 0;
-            virtual void session_write_before_buffer(char *const buffer, const std::size_t buffer_length) = 0;
+            virtual std::size_t session_write_before_buffer(char ** buffer) = 0;
         };
         /*!
          @class tcp_session_base

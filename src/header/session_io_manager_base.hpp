@@ -27,7 +27,7 @@ namespace livemap {
         virtual ~session_io_manager_base() {}
         
         virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length) = 0;
-        virtual void session_write_before_buffer(char *const buffer, const std::size_t buffer_length) = 0;
+        virtual std::size_t session_write_before_buffer(char **buffer) = 0;
         
         virtual std::weak_ptr<session_base> get_session() const
         {

@@ -19,6 +19,7 @@ namespace livemap {
         }
         _cache_iter = _id_container.begin();
     }
+    
     /*! @breif id 발급 요청하는 구현*/
     common_id_type local_id_manager::request_id()
     {

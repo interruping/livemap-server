@@ -31,7 +31,7 @@ namespace livemap {
         virtual ~repeat_io_manager() {};
         
         virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length);
-        virtual void session_write_before_buffer(char *const buffer, const std::size_t buffer_length);
+        virtual std::size_t session_write_before_buffer(char ** buffer);
         
     private:
         std::vector<char> _repeatBuffer;
