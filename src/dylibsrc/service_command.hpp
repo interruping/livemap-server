@@ -33,11 +33,22 @@ namespace livemap {
     		_position_data_index = add_segment(&pos ,sizeof(pos));
     	}
     	virtual ~update_node(){}
+        
+        
+        
 
     private:
     	std::size_t _position_update_id_index;
     	std::size_t _position_data_index;
 
+    };
+    
+    
+    class request_node_info : public command_form_base_t<update_node::type+1>
+    {
+    public:
+        
+        
     };
 
 }

@@ -11,10 +11,12 @@
 
 #include <stdint.h>
 #include <cstring>
-
+#include <vector>
+#include <iterator>
 #include <memory>
 #include <functional>
 #include <stdint.h>
+
 namespace solarcode {
 namespace livemap {
     
@@ -31,30 +33,52 @@ namespace livemap {
     template <command_type TYPE_ID = DEFAULT_COMMAND_TYPE>
     class command_form_base_t {
     public:
-        enum {
-            //세그먼트 최대 사이즈 512바이트
-            SEGMENT_ARRAY_MAX = 512
+        struct segment_info {
+            segment_info(std::size_t input_begin, std::size_t input_size):
+            begin(input_begin),
+            size(input_size) {}
+            const std::size_t begin;
+            const std::size_t size;
         };
         /*!
         @breif 디폴트 생성자
         */
         command_form_base_t()
         :_segment_lastest_index(0),
-        _segment_array()
+        _segment_pool()
         {
             
         }
         
+        command_form_base_t(const command_form_base_t& rhs)
+        :_segment_lastest_index(rhs._segment_lastest_index),
+        _segment_pool()
+        {
+            _segment_pool.clear();
+            _segment_pool.assign(rhs._segment_pool.begin(), rhs._segment_pool.end());
+        }
+        
+        
+        command_form_base_t& operator=(const command_form_base_t& rhs)
+        {
+            
+            if ( this == &rhs ) return *this;
+            
+            _segment_lastest_index = rhs._segment_lastest_index;
+            _segment_pool.clear();
+            _segment_pool.assign(rhs._segment_pool.begin(), rhs._segment_pool.end());
+            
+            return *this;
+        }
         /*!
         @breif 이미 내용물이 있는 버퍼를 인자로 받는 생성자
         @param command 콜백 함수 
         */
-        command_form_base_t(const char * const buffer_512_byte)
+        command_form_base_t(const char * const input_data, const std::size_t input_data_size)
         :_segment_lastest_index(0),
-        _segment_array()
+        _segment_pool()
         {
-            std::memcpy(_segment_array, buffer_512_byte, 512);
-
+            std::copy(input_data, input_data + input_data_size, std::back_inserter(_segment_pool));
         }
         
         /*!
@@ -62,7 +86,7 @@ namespace livemap {
         @param seg_buffer 추가할 세그먼트.
         @param seg_size_by_byte 세그먼트 사이즈
         */
-        virtual std::size_t add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte );
+        virtual segment_info add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte );
         
         /*!
         @breif 세그먼트 읽기
@@ -70,7 +94,7 @@ namespace livemap {
         @param seg_size_by_byte 세그먼트 사이즈
         @param read_buffer 읽어들일 세그먼트 버퍼 포인터 변수
         */
-        virtual void read_segment(const std::size_t seg_start, const std::size_t seg_size_by_byte, void * const read_buffer);
+        virtual void read_segment(void * const read_buffer, segment_info target_segment);
         /*!
         @breif 전체 세그먼트 사이즈 얻기
         @return std::size 사이즈
@@ -84,7 +108,7 @@ namespace livemap {
         @breif 세그먼트 직렬화 시키기
         @param serialized_buffer 직렬화된 버퍼를 읽어들일 포인터 변수
         */
-        virtual void serialize(char *const serialized_buffer);
+        virtual std::size_t serialize(char * const serialized_buffer);
 
         /*!
         @breif 커맨드 타입 정보 저장.
@@ -98,7 +122,7 @@ namespace livemap {
         /*!
         @breif 세그먼트 배열
         */
-        char _segment_array[SEGMENT_ARRAY_MAX];
+        std::vector<char> _segment_pool;
     };
 
     using command_form_base = command_form_base_t<>;
@@ -106,29 +130,31 @@ namespace livemap {
 }
 
 namespace solarcode {
-namespace livemap {
-	/*!@breif 세그먼트 데이터 추가 구현*/
+namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 	template <command_type TYPE_ID>
-	std::size_t command_form_base_t<TYPE_ID>::add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte )
+    typename command_form_base_t<TYPE_ID>::segment_info command_form_base_t<TYPE_ID>::add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte )
 	{
-
-		std::memcpy(_segment_array + _segment_lastest_index, seg_buffer, seg_size_by_byte);
+        
+        char input_data[seg_size_by_byte];
+        std::memcpy(input_data, seg_buffer, seg_size_by_byte);
+        
+        std::copy(input_data, input_data + seg_size_by_byte, std::back_inserter(_segment_pool));
 
 		std::size_t seg_start = _segment_lastest_index;
 
 		_segment_lastest_index += seg_size_by_byte;
-
-		return seg_start;
+        
+		return segment_info(seg_start, seg_size_by_byte);
 	}
 	/*!@breif 세그먼트 데이터를 읽는 구현*/
 	template <command_type TYPE_ID>
-	void command_form_base_t<TYPE_ID>::read_segment(const std::size_t seg_start, const std::size_t seg_size_by_byte, void * const read_buffer)
+	void command_form_base_t<TYPE_ID>::read_segment(void * const read_buffer, segment_info target_segment )
 	{
-		std::memcpy(read_buffer, _segment_array + seg_start, seg_size_by_byte);
+		std::memcpy(read_buffer, _segment_pool.data() + target_segment.begin, target_segment.size);
 	}
 	/*!@breif 전체 세그먼트 사이즈를 계산하는 구현*/
 	template <command_type TYPE_ID>
-	std::size_t command_form_base_t<TYPE_ID>::get_entire_size()
+    std::size_t command_form_base_t<TYPE_ID>::get_entire_size()
 	{
 		return _segment_lastest_index;
 	}
@@ -137,14 +163,14 @@ namespace livemap {
 	template <command_type TYPE_ID>
 	void command_form_base_t<TYPE_ID>::clear()
 	{
-		std::memset(_segment_array, 0, _segment_lastest_index);
-		_segment_lastest_index = 0;
+        _segment_pool.clear();
 	}
 	/*!@breif 직렬화하는 구현*/
 	template <command_type TYPE_ID>
-	void command_form_base_t<TYPE_ID>::serialize(char *const serialized_buffer)
+    std::size_t command_form_base_t<TYPE_ID>::serialize(char * const serialized_buffer)
 	{
-		std::memcpy(serialized_buffer, _segment_array, _segment_lastest_index);
+        std::memcpy(serialized_buffer, _segment_pool.data(), sizeof(_segment_pool));
+        return sizeof(_segment_pool.data());
 	}
 }
 }

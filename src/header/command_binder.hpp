@@ -26,7 +26,7 @@ namespace livemap {
     = "./dylib/libcommandbinder.so";
 #endif
     
-	static const char * const GO_BIND_COMMAND_SYMBOL = "do_bind_command";
+	static const char * const GO_BIND_COMMAND_SYMBOL = "do_command_bind";
 
 	using command_binder_type = std::size_t(*)(client_node_pool&, char *const, const std::size_t, char**);
 

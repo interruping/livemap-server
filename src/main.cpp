@@ -1,10 +1,11 @@
 
 //#include "server_service_logic.hpp"
-#include "server_base.hpp"
+
 #include "tcp_server.hpp"
 #include "echo_service_logic.hpp"
-#include "command_binder.hpp"
-#include "client_node_pool.hpp"
+
+#include "command_form.hpp"
+
 int main() {
     using namespace solarcode::livemap;
 //
@@ -13,7 +14,35 @@ int main() {
 //    
 //    server->start_service();
 //    delete server;
-    client_node_pool pool;
-    command_bind(pool, nullptr, 0, nullptr);
+    
+    command_form_base t1;
+    
+    const char *first = "this is first";
+    
+    command_form_base::segment_info s1 =
+    t1.add_segment((void *)first, std::strlen(first)+1);
+    
+    
+    const char *second = "second data 123";
+    command_form_base::segment_info s2 =
+    t1.add_segment((void *)second, std::strlen(second)+1);
+    
+    int input = 3;
+    
+    command_form_base::segment_info s3 =
+    t1.add_segment(&input, sizeof(input));
+    
+    command_form_base t2;
+    t2 = t1;
+    
+    int data;
+    t2.read_segment(&data, s3);
+    
+    char serializebuffer[t2.get_entire_size()];
+    t2.serialize(serializebuffer);
+    
+    
+    std::cout << data << std::endl;
+    
     return 0;
 }

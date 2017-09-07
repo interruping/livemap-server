@@ -53,8 +53,11 @@ namespace livemap{
             char * const link_error = dlerror();
 		}
 
+        typedef void(*findme_t)(int);
+        
 		command_binder_type dyload_func;
 
+        
 		dyload_func = (command_binder_type)dlsym(*handle, GO_BIND_COMMAND_SYMBOL);
 
 		char * const link_error = dlerror();

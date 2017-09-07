@@ -10,6 +10,7 @@
 #include "commandbinder.hpp"
 
 #include <cstring>
+#include <iostream>
 
 extern "C"{
     
