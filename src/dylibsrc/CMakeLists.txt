@@ -35,4 +35,4 @@ add_compile_options ( -W -Wall -std=c++14 )
 
 #빌드 플러그인 라이브러리 
 add_library ( commandbinder SHARED ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_INCLUDE_HEADERS} )
-set_property(TARGET commandbinder PROPERTY POSITION_INDEPENDENT_CODE ON)
+#set_property(TARGET commandbinder PROPERTY POSITION_INDEPENDENT_CODE ON)

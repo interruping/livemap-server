@@ -47,10 +47,10 @@ namespace livemap{
 	command_binder_type get_command_binder(void** handle)
 	{
 
-		*handle = dlopen(COMMAND_BINDER_LIB_PATH, RTLD_NOW);
+		*handle = dlopen(COMMAND_BINDER_LIB_PATH, RTLD_NOW|RTLD_GLOBAL);
 
 		if ( *handle == nullptr ) {
-
+            char * const link_error = dlerror();
 		}
 
 		command_binder_type dyload_func;
@@ -67,7 +67,7 @@ namespace livemap{
 
 	}
 
-	std::size_t command_bind(livemap_node_database& node_db, const char * const raw_query, const std::size_t raw_query_size, const char **result_buffer)
+	std::size_t command_bind(client_node_pool& node_db, char * const raw_query, const std::size_t raw_query_size, char **result_buffer)
 	{
 		static std::chrono::system_clock::time_point lastest_dynamic_load
 			   = std::chrono::system_clock::time_point(std::chrono::seconds(0));

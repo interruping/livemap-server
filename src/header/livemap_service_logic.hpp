@@ -9,9 +9,11 @@
 #ifndef livemap_service_logic_h
 #define livemap_service_logic_h
 
+#include <mutex>
+
 #include "service_logic_base.hpp"
 #include "id_manager.hpp"
-
+#include "client_node_pool.hpp"
 
 namespace solarcode {
 namespace livemap {
@@ -20,7 +22,7 @@ namespace livemap {
         livemap_service_logic()
         :service_logic_base(),
         _session_builder(),
-        _id_manager(std::make_unique<local_id_manager>(100)),
+        _id_manager(100),
         _node_pool()
         {
             
@@ -35,10 +37,12 @@ namespace livemap {
         virtual void error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error);
     private:
         server_base::session_builder_type _session_builder;
+
+        std::mutex _mutex_for_id_manager;
         
-        std::unique_ptr<local_id_manager> _id_manager;
+        local_id_manager _id_manager;
         
-        std::shared_ptr<void> _node_pool;
+        client_node_pool _node_pool;
         
     };
 }

@@ -15,8 +15,8 @@
 namespace solarcode {
 namespace livemap {
     /*!
-     @breif accept 작업 후 위임 delegate 위임작업 구현 (_strand_for_acceptor 안에서 동기화 되어 실행 됨.)
-     @see boost_secure_tcp_server._strand_for_acceptor
+     @breif accept 작업 후 위임 delegate 위임작업 구현 (_strand_for_accept_hander 안에서 동기화 되어 실행 됨.)
+     @see boost_secure_tcp_server._strand_for_accept_handler
      */
     void ssl_tcp_server_boost_impl::accept_complete(std::shared_ptr<bst_ssl_tcp_socket> socket,const boost::system::error_code& error)
     {
@@ -29,17 +29,18 @@ namespace livemap {
             SC_DBGMSG("error occure while acception process.");
 #endif
             //에러가 있을 시 에러 처리 위임
-        
-            delegate->error_occure(socket, std::make_shared<boost::system::error_code>(error));
             _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_start_service, this)));
+            delegate->error_occure(socket, std::make_shared<boost::system::error_code>(error));
+
         } else {
 #ifdef _DEBUG_
             SC_DBGMSG("acception process complete.");
 #endif
-            //에러가 없으므로 소켓을 처리하도록 위임.
-            delegate->handle_accept(socket);
             
             _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_start_service, this)));
+            //에러가 없으므로 소켓을 처리하도록 위임.
+            delegate->handle_accept(socket);
+
         }
         
         

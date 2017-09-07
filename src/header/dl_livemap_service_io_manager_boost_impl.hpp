@@ -8,6 +8,10 @@
 
 #ifndef dl_livemap_service_io_manager_boost_impl_h
 #define dl_livemap_service_io_manager_boost_impl_h
+
+#include <condition_variable>
+#include <mutex>
+
 #include "boost_asio_helper.hpp"
 #include "session_io_manager_base.hpp"
 #include "client_node_pool.hpp"
@@ -25,10 +29,15 @@ namespace livemap {
     private:
         static boost::asio::strand _strand_for_node_pool;
         
+        std::mutex _mutex_for_buffer;
+        
+        std::condition_variable _cv_for_buffer;
         boost::asio::io_service& _io_service;
         
         client_node_pool& _node_pool;
         
+        char *_buffer;
+        std::size_t _buffer_size;
     };
 }
 }

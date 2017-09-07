@@ -105,7 +105,7 @@ namespace livemap {
         double _latitude;
         /*! @breif 경도 변수 */
         double _longitude;
-        
+
     };
 }
 }

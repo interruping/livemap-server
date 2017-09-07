@@ -5,7 +5,7 @@
 
 
 #include "command_form.hpp"
-#include "client_node.hpp"
+#include "client_node_pool.hpp"
 
 namespace solarcode {
 namespace livemap {

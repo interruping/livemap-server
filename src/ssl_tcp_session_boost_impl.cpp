@@ -152,14 +152,15 @@ namespace livemap {
                 if ( io_delegate != nullptr ) {
                     size_of_data_to_write = io_delegate->session_write_before_buffer(&buffer);
                 }
-                
                 if ( buffer != nullptr ) {
                     delete[] buffer;
                 }
                 
+                
                 boost::system::error_code error;
                 socket->write_some(boost::asio::buffer(buffer, size_of_data_to_write), error);
                 
+
                 auto safe_wait_read
                 = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,
                                                        shared_from_this(),

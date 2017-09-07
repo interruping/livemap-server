@@ -21,11 +21,7 @@ namespace livemap {
         :session_io_manager_base(session),
         _repeatBuffer()
         {
-            std::shared_ptr<session_base> target_session = session.lock();
-            
-            if ( target_session ) {
-                target_session->set_delegate(this);
-            }
+
         }
         
         virtual ~repeat_io_manager() {};
