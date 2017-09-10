@@ -35,7 +35,8 @@ namespace livemap {
         
         auto unsafe_service = [this, buffer, buffer_length]() {
             std::unique_lock<std::mutex> lock_for_buffer(_mutex_for_buffer);
-            _buffer_size = command_bind(_node_pool, buffer, buffer_length, &_buffer);
+   
+            _buffer_size = command_bind(get_session_owner(),_node_pool, buffer, buffer_length, &_buffer);
             _cv_for_buffer.notify_one();
         };
         

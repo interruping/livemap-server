@@ -70,7 +70,7 @@ namespace livemap{
 
 	}
 
-	std::size_t command_bind(client_node_pool& node_db, char * const raw_query, const std::size_t raw_query_size, char **result_buffer)
+    std::size_t command_bind(std::weak_ptr<client_node> request_node, client_node_pool& node_db, char * const raw_query, const std::size_t raw_query_size, char **result_buffer)
 	{
 		static std::chrono::system_clock::time_point lastest_dynamic_load
 			   = std::chrono::system_clock::time_point(std::chrono::seconds(0));
@@ -111,7 +111,7 @@ namespace livemap{
 			}
 		}
 
-		return do_bind_command( node_db, raw_query, raw_query_size, result_buffer);
+		return do_bind_command(request_node, node_db, raw_query, raw_query_size, result_buffer);
 	}
 }
 }

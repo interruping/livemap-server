@@ -20,6 +20,7 @@ if ( APPLE )
 endif( APPLE )
 
 find_package (openssl REQUIRED)
+find_package (OpenSSL REQUIRED)
 
 if ( OpenSSL_FOUND )
 
@@ -53,7 +54,7 @@ link_libraries ( dl )
 
 #Boost Library Setting
 
-find_package ( Boost 1.60 COMPONENTS system thread REQUIRED )
+find_package ( Boost 1.58 COMPONENTS system thread REQUIRED )
 include_directories( ${Boost_INCLUDE_DIR} )
 
 # "debug" 형상 한정 컴파일 옵션, 링크 옵션

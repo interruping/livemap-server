@@ -34,11 +34,26 @@ namespace livemap {
     class command_form_base_t {
     public:
         struct segment_info {
-            segment_info(std::size_t input_begin, std::size_t input_size):
-            begin(input_begin),
+            segment_info():begin(0),size(0){};
+            
+            segment_info(std::size_t input_begin, std::size_t input_size)
+            :begin(input_begin),
             size(input_size) {}
-            const std::size_t begin;
-            const std::size_t size;
+            
+            segment_info(segment_info& rhs)
+            :begin(rhs.begin),
+            size(rhs.size) {}
+            
+            segment_info& operator=(const segment_info& rhs)
+            {
+                if ( this == &rhs ) return *this;
+                
+                begin = rhs.begin;
+                size = rhs.size;
+            }
+            
+            std::size_t begin;
+            std::size_t size;
         };
         /*!
         @breif 디폴트 생성자
@@ -144,7 +159,12 @@ namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 
 		_segment_lastest_index += seg_size_by_byte;
         
-		return segment_info(seg_start, seg_size_by_byte);
+        std::size_t seg_size = seg_size_by_byte;
+        
+        segment_info info;
+        info.begin = seg_start;
+        info.size = seg_size_by_byte;
+        return info;
 	}
 	/*!@breif 세그먼트 데이터를 읽는 구현*/
 	template <command_type TYPE_ID>

@@ -33,6 +33,7 @@ namespace livemap {
 		virtual void register_node(std::weak_ptr<client_node> new_node);
 		virtual void delete_node(common_id_type delete_node_id);
 		virtual void scan_all_nodes(std::function<void(std::weak_ptr<const client_node>)> callback);
+        
 	private:
 		std::map<common_id_type, std::weak_ptr<client_node>> _node_container;
 	};

@@ -28,7 +28,11 @@ namespace livemap {
     
 	static const char * const GO_BIND_COMMAND_SYMBOL = "do_command_bind";
 
-	using command_binder_type = std::size_t(*)(client_node_pool&, char *const, const std::size_t, char**);
+    using command_binder_type = std::size_t(*)(std::weak_ptr<client_node> ,
+                                               client_node_pool& ,
+                                               char *const ,
+                                               const std::size_t ,
+                                               char**);
 
 	void calc_file_sha1_hash(const char * const file_path, char *const hash_buffer);
 
@@ -37,7 +41,11 @@ namespace livemap {
 
 	command_binder_type get_command_binder(void** handle);
 
-	std::size_t command_bind(client_node_pool& node_db, char * const raw_query, const std::size_t raw_query_size,  char **result_buffer);
+    std::size_t command_bind(std::weak_ptr<client_node> request_node,
+                             client_node_pool& node_db,
+                             char * const raw_query,
+                             const std::size_t raw_query_size,
+                             char **result_buffer);
 }
 }
 

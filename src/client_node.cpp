@@ -15,7 +15,7 @@ namespace livemap {
 	 _latitude(0.0f), //경도 초기화
     _longitude(0.0f) //위도 초기화
     {
-        
+        set_id(unique_id);
     }
     
     /*! @breif 소멸자 구현 */

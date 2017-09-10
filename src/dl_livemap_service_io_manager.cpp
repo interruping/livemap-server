@@ -30,5 +30,19 @@ namespace livemap {
         return _pimple->session_write_before_buffer(buffer);
     }
     
+    void dl_livemap_service_io_manager::set_session_owner(std::shared_ptr<client_node> owner) {
+        _pimple->set_session_owner(owner);
+    }
+    
+    std::weak_ptr<client_node> dl_livemap_service_io_manager::get_session_owner() const {
+        return _pimple->get_session_owner();
+    }
+    
+    std::weak_ptr<session_base> dl_livemap_service_io_manager::get_session() const
+    {
+        return _pimple->get_session();
+    }
+    
+    
 }
 }

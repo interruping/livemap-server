@@ -23,6 +23,10 @@ namespace livemap {
         virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length);
         virtual std::size_t session_write_before_buffer(char ** buffer);
         
+        virtual void set_session_owner(std::shared_ptr<client_node> owner);
+        virtual std::weak_ptr<client_node> get_session_owner() const;
+        
+        virtual std::weak_ptr<session_base> get_session() const;
     private:
         std::unique_ptr<session_io_manager_base> _pimple;
     };
