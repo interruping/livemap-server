@@ -92,8 +92,8 @@ namespace livemap {
         @breif 노드의 좌표 정보를 업데이트(설정)한다.
         @param location 좌표 정보가 담긴 구조체. (참조 형 파라미터)
         */
-        virtual void setCoordinate(const coordinate& location);
-        virtual void setCoordinate(const coordinate&& location); ///@breif 우측 참조 파라미터 버전
+        virtual void set_coordinate(const coordinate& location);
+        virtual void set_coordinate(const coordinate&& location); ///@breif 우측 참조 파라미터 버전
         /*!
         @breif 노드의 좌표 정보를 가져온다. 
         @return coordinate 좌표 정보 반환.

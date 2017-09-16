@@ -11,6 +11,7 @@
 
 #include "session_io_manager_base.hpp"
 #include "client_node_pool.hpp"
+#include "debug_utility.hpp"
 
 namespace solarcode {
 namespace livemap {
@@ -18,7 +19,11 @@ namespace livemap {
     public:
         dl_livemap_service_io_manager(std::weak_ptr<session_base> session, client_node_pool& node_pool);
         
-        virtual ~dl_livemap_service_io_manager() {}
+        virtual ~dl_livemap_service_io_manager() {
+#ifdef _DEBUG_
+            SC_DBGMSG("dl_livemap_service_io_manager destructor execute");
+#endif
+        }
         
         virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length);
         virtual std::size_t session_write_before_buffer(char ** buffer);

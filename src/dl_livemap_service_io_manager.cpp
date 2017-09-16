@@ -7,18 +7,15 @@
 //
 
 #include "dl_livemap_service_io_manager.hpp"
+#include "dl_livemap_service_io_manager_boost_impl.hpp"
 
 namespace solarcode {
 namespace livemap {
     dl_livemap_service_io_manager::dl_livemap_service_io_manager(std::weak_ptr<session_base> session, client_node_pool& node_pool)
-    :session_io_manager_base(session),
-    _pimple(nullptr)
+    :session_io_manager_base(std::weak_ptr<session_base>()),
+    _pimple(new dl_livemap_service_io_manager_boost_impl(session, node_pool))
     {
-        std::shared_ptr<session_base> target_session = session.lock();
-        
-        if ( target_session ) {
-            target_session->set_delegate(this);
-        }
+
     }
     void dl_livemap_service_io_manager::session_read_after_buffer(char *const buffer, const std::size_t buffer_length)
     {

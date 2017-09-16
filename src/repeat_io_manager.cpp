@@ -19,10 +19,10 @@ namespace livemap {
     
     std::size_t repeat_io_manager::session_write_before_buffer(char **buffer)
     {
-        char *buffer_to_fill = *buffer;
-        const std::size_t size_of_data = sizeof(_repeatBuffer.data());
-        buffer_to_fill = new char[size_of_data];
-        std::memcpy(buffer_to_fill, _repeatBuffer.data(), size_of_data);
+        
+        const std::size_t size_of_data = _repeatBuffer.size();
+        *buffer = new char[size_of_data];
+        std::memcpy(*buffer, _repeatBuffer.data(), size_of_data);
         return size_of_data;
     }
 }

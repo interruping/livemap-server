@@ -8,7 +8,7 @@
 */
 
 #include "commandbinder.hpp"
-
+#include "debug_utility.hpp"
 #include <cstring>
 #include <iostream>
 
@@ -50,26 +50,29 @@ namespace livemap {
         }
         
 		switch(read_service_type(raw_request)){
-            case request_node_info::type : {
+            case request_user_info::type : {
                 
-                set_id set_id_reply(request_node_s->get_id());
+                common_id_type id = request_node_s->get_id();
+                std::cout << "id is " << id << std::endl;
+#ifdef _DEBUG_
+                SC_DBGMSG("server serve new id to client id is :" + id);
+#endif
+                set_user_info set_user_info_reply(id);
                 
-                *result_buffer = new char[set_id_reply.get_entire_size() + sizeof(command_type)];
+                *result_buffer = new char[set_user_info_reply.get_entire_size() + sizeof(command_type)];
                 
-                command_type type = set_id::type;
+                command_type type = set_user_info::type;
                 std::memcpy(*result_buffer, &type, sizeof(type));
                 
-                set_id_reply.serialize(*result_buffer + sizeof(type));
+                set_user_info_reply.serialize(*result_buffer + sizeof(type));
                 
-                return set_id_reply.get_entire_size() + sizeof(command_type);
+                return set_user_info_reply.get_entire_size() + sizeof(command_type);
                 
                 break;
             }
-            case update_node::type : {
+            case user_update_node::type : {
             
-                std::shared_ptr<client_node> request_node_s = request_node.lock();
-                
-                request_node_s->setCoordinate(make_coordinate(0.0f, 0.0f));
+                request_node_s->set_coordinate(make_coordinate(0.0f, 0.0f));
                 
                 
                 break;

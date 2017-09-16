@@ -103,18 +103,39 @@ namespace livemap {
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
+                char read_header_info[4] = {0,};
+                std::size_t sizeof_int = 4;
                 
-                static const std::size_t buffer_length = 512;
+                boost::system::error_code header_read_error;
+                std::size_t length_of_header = socket->read_some(boost::asio::buffer(&read_header_info, sizeof_int), header_read_error);
                 
-                char tmp_raw_buffer[buffer_length] = {0,};
+                if ( length_of_header != sizeof_int ) {
+                    //error;
+                    return;
+                }
                 
-                boost::system::error_code error;
-                std::size_t length = socket->read_some(boost::asio::buffer(tmp_raw_buffer, buffer_length), error);
+                if ( header_read_error ) {
+                    //error;
+                    return;
+                }
+                
+                
+                int header_info = 0;
+                
+                std::memcpy(&header_info, read_header_info, sizeof_int);
+                
+                std::vector<char> buffer_for_body(header_info);
+                
+                boost::system::error_code body_error;
+                std::size_t length_of_body = socket->read_some(boost::asio::buffer(buffer_for_body.data(), header_info), body_error);
+                
+                
+                
                 
                 session_io_delegate *io_delegate = get_delegate();
                 
                 if ( io_delegate != nullptr ) {
-                    io_delegate->session_read_after_buffer(tmp_raw_buffer, buffer_length);
+                    io_delegate->session_read_after_buffer(buffer_for_body.data(), length_of_body);
                 }
                 
                 auto safe_wait_write
@@ -152,15 +173,22 @@ namespace livemap {
                 if ( io_delegate != nullptr ) {
                     size_of_data_to_write = io_delegate->session_write_before_buffer(&buffer);
                 }
+
+                int header_data = size_of_data_to_write;
+                const int size_of_int = 4;
+                boost::system::error_code header_error;
+                
+                boost::asio::write(*socket,boost::asio::buffer(&header_data, size_of_int),boost::asio::transfer_all(), header_error);
+                
+                boost::system::error_code error;
+
+                boost::asio::write(*socket,boost::asio::buffer(buffer, size_of_data_to_write),boost::asio::transfer_all(), error);
+
+                
                 if ( buffer != nullptr ) {
                     delete[] buffer;
                 }
                 
-                
-                boost::system::error_code error;
-                socket->write_some(boost::asio::buffer(buffer, size_of_data_to_write), error);
-                
-
                 auto safe_wait_read
                 = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,
                                                        shared_from_this(),

@@ -151,6 +151,7 @@ namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 	{
         
         char input_data[seg_size_by_byte];
+        
         std::memcpy(input_data, seg_buffer, seg_size_by_byte);
         
         std::copy(input_data, input_data + seg_size_by_byte, std::back_inserter(_segment_pool));

@@ -38,7 +38,7 @@ namespace livemap {
         _io_trigger_timer(get_shared_io_service()),//타머어 초기화.
         _strand_for_session(_io_trigger_timer.get_io_service()), //strand 초기화.
         _io_service(_io_trigger_timer.get_io_service()),
-        _expire_callback(nullptr)
+        _expire_callback([](){})
         {
 #ifdef _DEBUG_
             SC_DBGMSG("boost secure tcp session created.");

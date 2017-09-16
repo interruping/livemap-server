@@ -34,7 +34,7 @@ namespace livemap {
         /*!
         @breif 노드의 좌표 정보를 업데이트(설정)한다.
         */
-        void client_node::setCoordinate(const coordinate& location)
+        void client_node::set_coordinate(const coordinate& location)
         {
             _latitude = location.latitude;
             _longitude = location.longitude;
@@ -42,7 +42,7 @@ namespace livemap {
         /*!
         @breif 노드의 좌표 정보를 업데이트(설정)한다.
         */
-        void client_node::setCoordinate(const coordinate&& location)
+        void client_node::set_coordinate(const coordinate&& location)
         {
 #ifdef _DEBUG_
             SC_DBGMSG("input coordinate info: lat - " << location.latitude  << "lon - " << location.longitude );

@@ -12,6 +12,7 @@
 #include <memory>
 #include "session_base.hpp"
 #include "client_node.hpp"
+#include "debug_utility.hpp"
 
 namespace solarcode {
 namespace livemap {
@@ -30,7 +31,11 @@ namespace livemap {
             }
         }
         
-        virtual ~session_io_manager_base() {}
+        virtual ~session_io_manager_base() {
+#ifdef _DEBUG_
+            SC_DBGMSG("session_io_manager_base destructor execute.");
+#endif
+        }
         
         virtual void session_read_after_buffer(char *const buffer, const std::size_t buffer_length) = 0;
         virtual std::size_t session_write_before_buffer(char **buffer) = 0;
