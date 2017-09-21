@@ -140,7 +140,7 @@ namespace livemap {
         std::vector<char> _segment_pool;
     };
 
-    using command_form_base = command_form_base_t<>;
+    using command_form_base = command_form_base_t<0>;
 }
 }
 
@@ -190,8 +190,19 @@ namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 	template <command_type TYPE_ID>
     std::size_t command_form_base_t<TYPE_ID>::serialize(char * const serialized_buffer)
 	{
-        std::memcpy(serialized_buffer, _segment_pool.data(), sizeof(_segment_pool));
-        return sizeof(_segment_pool.data());
+        const char * dhg = _segment_pool.data();
+        
+        for ( int index = 0; index < _segment_lastest_index ; index++ ){
+            printf("\n _segment_pool.data() index: %d - data: %2x", index, dhg[index]);
+        }
+        
+        std::memcpy(serialized_buffer, _segment_pool.data(), _segment_lastest_index);
+        
+        for ( int index = 0; index < _segment_lastest_index ; index++ ){
+            printf("\n serialized index: %d - data: %2x", index, serialized_buffer[index]);
+        }
+        
+        return _segment_lastest_index ;
 	}
 }
 }

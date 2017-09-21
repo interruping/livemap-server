@@ -32,15 +32,14 @@ namespace livemap {
 
     void dl_livemap_service_io_manager_boost_impl::session_read_after_buffer(char *const buffer, const std::size_t buffer_length)
     {
-        std::vector<char> pass_buffer(buffer_length);
-        for ( std::size_t index = 0; index < buffer_length; index++ ) {
-            pass_buffer[0] = buffer[0];
-        }
+
         
-        auto unsafe_service = [this, pass_buffer, buffer_length]() {
+        auto unsafe_service = [this, buffer, buffer_length]() {
             std::unique_lock<std::mutex> lock_for_buffer(_mutex_for_buffer);
    
-            _buffer_size = command_bind(get_session_owner(),_node_pool, const_cast<char *>(pass_buffer.data()), buffer_length, &_buffer);
+            _buffer_size = command_bind(get_session_owner(),_node_pool, buffer, buffer_length, &_buffer);
+            
+            delete [] buffer;
             //_cv_for_buffer.notify_one();
             
         };
@@ -56,9 +55,15 @@ namespace livemap {
         
         //_cv_for_buffer.wait(lock_for_buffer);
         //char *buffer_to_return = *buffer;
-        
+//        for (int index = 0; index < _buffer_size; index++ ) {
+//            printf("\n _buffer index: %d data: %2x", index, _buffer[index]);
+//        }
+//        
         *buffer = _buffer;
         
+//        for (int index = 0; index < _buffer_size; index++ ) {
+//            printf("\n *buffer index: %d data: %2x", index, (*buffer)[index]);
+//        }
         _buffer = nullptr;
         std::size_t size_to_return = _buffer_size;
         _buffer_size = 0;

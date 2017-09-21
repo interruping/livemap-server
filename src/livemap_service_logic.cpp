@@ -24,31 +24,35 @@ namespace livemap {
         session_io_manager_base *new_session_io_manager
         = new dl_livemap_service_io_manager(new_session, _node_pool);
         
-        std::unique_lock<std::mutex> lock_for_id_manager(_mutex_for_id_manager);
+        
+        std::unique_lock<std::mutex> lock_for_id_manager_and_node_pool(_mutex_for_id_manager_and_node_pool);
         
         common_id_type new_id = _id_manager.request_id();
+        std::shared_ptr<client_node> new_client = std::make_shared<client_node>(new_id);
+        
+        _node_pool.register_node(new_client);
 #ifdef _DEBUG_
         SC_DBGMSG("new id alloc to session id is " << new_id);
 #endif
-        lock_for_id_manager.unlock();
+        lock_for_id_manager_and_node_pool.unlock();
         
         if ( new_id == no_more_id ) {
             return;
         }
+    
         
-        
-        
-        std::shared_ptr<client_node> new_client = std::make_shared<client_node>(new_id);
         
         new_session_io_manager->set_session_owner(new_client);
+
         
         new_session->set_expire_callback([this, new_id]{
-            std::unique_lock<std::mutex> lock_for_id_manager(_mutex_for_id_manager);
+            std::unique_lock<std::mutex> lock_for_id_manager_and_node_pool(_mutex_for_id_manager_and_node_pool);
 #ifdef _DEBUG_
             SC_DBGMSG("id:" << new_id << " is returned by expired session");
 #endif
             _id_manager.return_id(new_id);
-            lock_for_id_manager.unlock();
+            _node_pool.delete_node(new_id);
+            lock_for_id_manager_and_node_pool.unlock();
         });
         
         new_session->start();

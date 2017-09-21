@@ -11,6 +11,7 @@
 
 #include <mutex>
 
+
 #include "service_logic_base.hpp"
 #include "id_manager.hpp"
 #include "client_node_pool.hpp"
@@ -38,12 +39,12 @@ namespace livemap {
     private:
         server_base::session_builder_type _session_builder;
 
-        std::mutex _mutex_for_id_manager;
+        std::mutex _mutex_for_id_manager_and_node_pool;
         
         local_id_manager _id_manager;
         
         client_node_pool _node_pool;
-        
+
     };
 }
 }

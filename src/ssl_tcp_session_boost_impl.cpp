@@ -77,7 +77,7 @@ namespace livemap {
             SC_DBGMSG("handshake complete start socket read.");
 #endif
             
-            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(100));
+            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(1000));
             
             auto safe_wait_read
             = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,
@@ -124,10 +124,10 @@ namespace livemap {
                 
                 std::memcpy(&header_info, read_header_info, sizeof_int);
                 
-                std::vector<char> buffer_for_body(header_info);
+                char *buffer_for_body = new char[header_info];
                 
                 boost::system::error_code body_error;
-                std::size_t length_of_body = socket->read_some(boost::asio::buffer(buffer_for_body.data(), header_info), body_error);
+                std::size_t length_of_body = socket->read_some(boost::asio::buffer(buffer_for_body, header_info), body_error);
                 
                 
                 
@@ -135,7 +135,7 @@ namespace livemap {
                 session_io_delegate *io_delegate = get_delegate();
                 
                 if ( io_delegate != nullptr ) {
-                    io_delegate->session_read_after_buffer(buffer_for_body.data(), length_of_body);
+                    io_delegate->session_read_after_buffer(buffer_for_body, length_of_body);
                 }
                 
                 auto safe_wait_write
@@ -174,6 +174,11 @@ namespace livemap {
                     size_of_data_to_write = io_delegate->session_write_before_buffer(&buffer);
                 }
 
+                
+//                for (int index = 0; index < size_of_data_to_write; index++) {
+//                    printf("\nbuffer to write: char[%d] = %2x", index, buffer[index]);
+//                }
+                
                 int header_data = size_of_data_to_write;
                 const int size_of_int = 4;
                 boost::system::error_code header_error;

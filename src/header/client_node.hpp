@@ -9,7 +9,12 @@
 
 #include <set>
 #include <string>
+#include <iostream>
+#include <memory.h>
 
+#ifdef _DEBUG_
+#include "debug_utility.hpp"
+#endif
 
 namespace solarcode {
 namespace livemap {
@@ -83,10 +88,13 @@ namespace livemap {
         @param unique_id 노드 아이디
         */
         client_node(common_id_type unique_id);
+        
+        client_node(const client_node& rhs);
+        client_node& operator=(const client_node& rhs);
         /*!
         @breif 소멸자
         */
-       virtual ~client_node();
+        virtual ~client_node();
 
         /*!
         @breif 노드의 좌표 정보를 업데이트(설정)한다.

@@ -9,6 +9,7 @@
 
 #include "commandbinder.hpp"
 #include "debug_utility.hpp"
+#include "geo_calc_distance.h"
 #include <cstring>
 #include <iostream>
 
@@ -53,10 +54,7 @@ namespace livemap {
             case request_user_info::type : {
                 
                 common_id_type id = request_node_s->get_id();
-                std::cout << "id is " << id << std::endl;
-#ifdef _DEBUG_
-                SC_DBGMSG("server serve new id to client id is :" + id);
-#endif
+
                 set_user_info set_user_info_reply(id);
                 
                 *result_buffer = new char[set_user_info_reply.get_entire_size() + sizeof(command_type)];
@@ -72,18 +70,74 @@ namespace livemap {
             }
             case user_update_node::type : {
             
-                request_node_s->set_coordinate(make_coordinate(0.0f, 0.0f));
+                user_update_node recieve_command(raw_request + 4, raw_request_size);
+                client_node update_info = recieve_command.get_client_node_for_update();
+                request_node_s->set_coordinate(
+                update_info.getCoordinate()
+                );
                 
+                
+                std::vector<client_node> near_nodes;
+                
+                node_db.scan_all_nodes([&](std::weak_ptr<const client_node> other_node){
+                    auto other_node_s = other_node.lock();
+                    
+                    if ( request_node_s->get_id() == other_node_s->get_id() ) {
+                        return;
+                    }
+                    
+                    coordinate request_node_coord = request_node_s->getCoordinate();
+                    coordinate other_node_coord = other_node_s->getCoordinate();
+                    
+                    double calc_distance = distance(request_node_coord.latitude,
+                                                    request_node_coord.longitude,
+                                                    other_node_coord.latitude,
+                                                    other_node_coord.longitude
+                                                    , 'k');
+                    
+                    if ( calc_distance <= 1.0 ) {
+                        client_node new_near_node(*other_node_s);
+                        
+                        near_nodes.push_back(new_near_node);
+                    }
+                    
+                    
+                    
+                });
+                
+                near_node_info near_node_info_command;
+                near_node_info_command.set_near_node(near_nodes);
+                
+                int type = near_node_info::type;
+                *result_buffer = new char[near_node_info_command.get_entire_size() + sizeof(type)];
+                int buffer_size = near_node_info_command.get_entire_size() + sizeof(type);
+                std::memcpy(*result_buffer, &type, sizeof(type));
+                
+                near_node_info_command.serialize(*result_buffer + sizeof(type));
+               
+
+//                for ( int index = 0; index < buffer_size; index++ ){
+//                    printf("\n *result_buffer index: %d data: %2x", index, (*result_buffer)[index]);
+//                }
+                
+                return near_node_info_command.get_entire_size() + sizeof(type);
                 
                 break;
             }
             case command_form_base::type : {
-
+                *result_buffer = new char[4];
+                int type =command_form_base::type;
+                
+                std::memcpy(*result_buffer, &type, 4);
+            
+                return 4;
                 break;
             }
 
-
+                
 		}
+        
+        return 0;
 	}
 
 }

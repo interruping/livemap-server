@@ -20,6 +20,8 @@ file (GLOB_RECURSE LIVEMAP_C_HEADERS  "*.h")
 file (GLOB_RECURSE LIVEMAP_CXX_HEADERS  "*.hpp")
 set ( LIVEMAP_INCLUDE_HEADERS ${LIVEMAP_C_HEADERS} ${LIVEMAP_CXX_HEADERS} )
 file ( GLOB LIVEMAP_CXX_SOURCES *.cpp )
+set ( LIVEMAP_CLIENT_NODE_CPP ../client_node.cpp )
+
 
 # for multi-config builds (e.g. msvc)
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
@@ -34,5 +36,5 @@ add_compile_options ( -W -Wall -std=c++14 )
 
 
 #빌드 플러그인 라이브러리 
-add_library ( commandbinder SHARED ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_INCLUDE_HEADERS} )
+add_library ( commandbinder SHARED ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_CLIENT_NODE_CPP} ${LIVEMAP_INCLUDE_HEADERS} )
 #set_property(TARGET commandbinder PROPERTY POSITION_INDEPENDENT_CODE ON)
