@@ -101,7 +101,7 @@ namespace livemap {
         @param seg_buffer 추가할 세그먼트.
         @param seg_size_by_byte 세그먼트 사이즈
         */
-        virtual segment_info add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte );
+        virtual segment_info add_segment(const void * const seg_buffer, const std::size_t seg_size_by_byte );
         
         /*!
         @breif 세그먼트 읽기
@@ -147,7 +147,7 @@ namespace livemap {
 namespace solarcode {
 namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 	template <command_type TYPE_ID>
-    typename command_form_base_t<TYPE_ID>::segment_info command_form_base_t<TYPE_ID>::add_segment(void * const seg_buffer, const std::size_t seg_size_by_byte )
+    typename command_form_base_t<TYPE_ID>::segment_info command_form_base_t<TYPE_ID>::add_segment(const void * const seg_buffer, const std::size_t seg_size_by_byte )
 	{
         
         char input_data[seg_size_by_byte];
@@ -159,8 +159,6 @@ namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 		std::size_t seg_start = _segment_lastest_index;
 
 		_segment_lastest_index += seg_size_by_byte;
-        
-        std::size_t seg_size = seg_size_by_byte;
         
         segment_info info;
         info.begin = seg_start;
@@ -190,17 +188,9 @@ namespace livemap {  	/*!@breif 세그먼트 데이터 추가 구현*/
 	template <command_type TYPE_ID>
     std::size_t command_form_base_t<TYPE_ID>::serialize(char * const serialized_buffer)
 	{
-        const char * dhg = _segment_pool.data();
-        
-        for ( int index = 0; index < _segment_lastest_index ; index++ ){
-            printf("\n _segment_pool.data() index: %d - data: %2x", index, dhg[index]);
-        }
-        
+
         std::memcpy(serialized_buffer, _segment_pool.data(), _segment_lastest_index);
-        
-        for ( int index = 0; index < _segment_lastest_index ; index++ ){
-            printf("\n serialized index: %d - data: %2x", index, serialized_buffer[index]);
-        }
+
         
         return _segment_lastest_index ;
 	}

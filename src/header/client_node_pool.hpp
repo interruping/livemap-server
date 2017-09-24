@@ -25,7 +25,9 @@ namespace livemap {
 		 @breif 생성자
 		 */
 		client_node_pool()
-		:_node_container(){
+		: _node_container()
+        , _node_msg_pool()
+        {
 
 		}
 		virtual ~client_node_pool(){}
@@ -33,9 +35,13 @@ namespace livemap {
 		virtual void register_node(std::weak_ptr<client_node> new_node);
 		virtual void delete_node(common_id_type delete_node_id);
 		virtual void scan_all_nodes(std::function<void(std::weak_ptr<const client_node>)> callback);
+        virtual void save_msg(int sender_id, int receiver_id, std::string msg);
+        virtual bool msg_check(int id);
+        virtual std::pair<int, std::string> get_msg(int id);
         
 	private:
-		std::map<common_id_type, std::weak_ptr<client_node>> _node_container;
+		std::map<int, std::weak_ptr<client_node>> _node_container;
+        std::map<int, std::pair<int,std::string>> _node_msg_pool;
 	};
 }
 }

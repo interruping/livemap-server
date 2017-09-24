@@ -68,7 +68,23 @@ namespace livemap {
                 
                 break;
             }
+            case user_viewpoint_update::type :
             case user_update_node::type : {
+                
+                
+                if ( node_db.msg_check(request_node_s->get_id()) ) {
+                    auto sender_id_and_msg = node_db.get_msg(request_node_s->get_id());
+                    utf8_message_send to_send_msg(sender_id_and_msg.first, request_node_s->get_id(), sender_id_and_msg.second);
+                    
+                    int type = utf8_message_send::type;
+                    *result_buffer = new char[to_send_msg.get_entire_size() + sizeof(command_type)];
+                    std::memcpy(*result_buffer, &type, sizeof(command_type));
+                    
+                    to_send_msg.serialize(*result_buffer + sizeof(command_type));
+                    
+                    return to_send_msg.get_entire_size() + sizeof(command_type);
+                    
+                }
             
                 user_update_node recieve_command(raw_request + 4, raw_request_size);
                 client_node update_info = recieve_command.get_client_node_for_update();
@@ -79,6 +95,17 @@ namespace livemap {
                 
                 std::vector<client_node> near_nodes;
                 
+                coordinate request_node_coord;
+                
+                int type4coordbind = read_service_type(raw_request);
+                
+                if ( type4coordbind == user_update_node::type ){
+                    request_node_coord = request_node_s->getCoordinate();
+                } else if ( type4coordbind == user_viewpoint_update::type ) {
+                    user_viewpoint_update vp_update(raw_request + 4, raw_request_size);
+                    request_node_coord = vp_update.get_viewpoint();
+                }
+                
                 node_db.scan_all_nodes([&](std::weak_ptr<const client_node> other_node){
                     auto other_node_s = other_node.lock();
                     
@@ -86,7 +113,7 @@ namespace livemap {
                         return;
                     }
                     
-                    coordinate request_node_coord = request_node_s->getCoordinate();
+                    
                     coordinate other_node_coord = other_node_s->getCoordinate();
                     
                     double calc_distance = distance(request_node_coord.latitude,
@@ -123,6 +150,18 @@ namespace livemap {
                 return near_node_info_command.get_entire_size() + sizeof(type);
                 
                 break;
+            }
+            case utf8_message_send::type : {
+                utf8_message_send receive_msg(raw_request + 4, raw_request_size - 4);
+                node_db.save_msg(receive_msg.sender_id(), receive_msg.recv_id(), receive_msg.get_msg());
+            
+                
+                *result_buffer = new char[4];
+                int type =command_form_base::type;
+                
+                std::memcpy(*result_buffer, &type, 4);
+                
+                return 4;
             }
             case command_form_base::type : {
                 *result_buffer = new char[4];

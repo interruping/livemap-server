@@ -77,12 +77,12 @@ namespace livemap{
         _context.use_private_key_file("server.key", boost::asio::ssl::context::pem);
         _context.use_tmp_dh_file("dh2048.pem");
         
-        uint32_t thread_num = 1;
+        uint32_t thread_num = 10;
         
         for ( uint32_t count = 0; count < thread_num; count++ ){
             auto ios_runner = [this](){
                 _ios.run();
-                printf("ssss");
+
             };
             
             _thread_group.create_thread(ios_runner);

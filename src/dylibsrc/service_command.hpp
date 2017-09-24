@@ -3,7 +3,7 @@
 
 
 
-
+#include "service_type.hpp"
 #include "command_form.hpp"
 #include "client_node_pool.hpp"
 
@@ -27,7 +27,7 @@ namespace livemap {
     	command_form_base_t<TYPE_ID>(),
         _id_seg_info(0,4),
         _lat_seg_info(4,8),
-        _lon_seg_info(12,20)
+        _lon_seg_info(12,8)
     	{
             auto id = update_info.get_id();
             _id_seg_info = command_form_base_t<TYPE_ID>::add_segment(&id, 4);
@@ -44,7 +44,7 @@ namespace livemap {
         :command_form_base_t<TYPE_ID>(input_data, input_data_size),
         _id_seg_info(0,4),
         _lat_seg_info(4,8),
-        _lon_seg_info(12,20)
+        _lon_seg_info(12,8)
         {
             
         }
@@ -75,7 +75,7 @@ namespace livemap {
         typename command_form_base_t<TYPE_ID>::segment_info _lon_seg_info;
     };
     
-    class user_update_node : public update_node_base<1>
+    class user_update_node : public update_node_base<USERNODEUPDATE>
     {
     public:
         user_update_node(client_node user_update_info)
@@ -94,7 +94,7 @@ namespace livemap {
     };
     
     
-    class request_user_info : public command_form_base_t<2>
+    class request_user_info : public command_form_base_t<REQUESTUSERINFO>
     {
     public:
         request_user_info():
@@ -104,7 +104,7 @@ namespace livemap {
         
     };
     
-    class set_user_info : public command_form_base_t<3>
+    class set_user_info : public command_form_base_t<SETUSERINFO>
     {
     public:
         set_user_info(common_id_type new_id) :
@@ -132,7 +132,7 @@ namespace livemap {
         
     };
     
-    class near_node_info : public command_form_base_t<4>
+    class near_node_info : public command_form_base_t<NEARNODEINFO>
     {
     public:
         near_node_info()
@@ -209,6 +209,112 @@ namespace livemap {
         
     private:
         segment_info _num_of_near_node_info;
+    };
+    
+    class user_viewpoint_update : public update_node_base<USERVIEWPOINTUPDATE>
+    {
+    public:
+        user_viewpoint_update(client_node user_update_info, coordinate view_point)
+        : update_node_base(user_update_info)
+        , _viewpoint_lat(20, 8)
+        , _viewpoint_lon(28, 8)
+        {
+            double lat = view_point.latitude;
+            double lon = view_point.longitude;
+            add_segment(&lat, 8);
+            add_segment(&lon, 8);
+        }
+        
+        user_viewpoint_update(const char * const input_data, const std::size_t input_data_size)
+        : update_node_base(input_data, input_data_size)
+        , _viewpoint_lat(20, 8)
+        , _viewpoint_lon(28, 8)
+        {
+            
+        }
+        
+        const coordinate get_viewpoint() {
+            coordinate viewpoint;
+            double lat = 0.0;
+            double lon = 0.0;
+            read_segment(&lat, _viewpoint_lat);
+            read_segment(&lon, _viewpoint_lon);
+            
+            viewpoint.latitude = lat;
+            viewpoint.longitude = lon;
+            
+            return viewpoint;
+        }
+    private:
+        segment_info _viewpoint_lat;
+        segment_info _viewpoint_lon;
+    };
+    
+    class utf8_message_send : public command_form_base_t<UTF8MESSAGESEND>
+    {
+    public:
+        utf8_message_send(int send_node_id, int recv_node, std::string& msg)
+        : command_form_base_t()
+        , _sender_id_info(0, 4)
+        , _recv_id_info(4, 4)
+        , _msg_length_info(8, 4)
+        {
+            add_segment(&send_node_id, 4);
+            add_segment(&recv_node, 4);
+            int msg_length = msg.length();
+            add_segment(&msg_length, 4);
+            
+            const char *tmp = msg.c_str();
+            add_segment(tmp, msg_length + 1 );
+            
+        }
+        
+        utf8_message_send(const char * const input_data, const std::size_t input_data_size)
+        : command_form_base_t(input_data, input_data_size)
+        , _sender_id_info(0, 4)
+        , _recv_id_info(4, 4)
+        , _msg_length_info(8, 4)
+        {
+            
+        }
+        
+        int sender_id() {
+            int id = 0;
+            read_segment(&id, _sender_id_info);
+            
+            return id;
+        }
+        
+        int recv_id() {
+            int id = 0;
+            read_segment(&id, _recv_id_info);
+            
+            return id;
+        }
+        
+        std::string get_msg() {
+            
+            int msg_length = 0;
+            read_segment(&msg_length, _msg_length_info);
+            
+            char *msg = new char[msg_length + 1];
+            
+            segment_info msg_info(12, msg_length + 1);
+            read_segment(msg, msg_info);
+            
+            msg[msg_length] = '\0';
+            std::string ret_str(msg);
+            
+            delete [] msg;
+            
+            return ret_str;
+        }
+        
+        
+    private:
+        segment_info _sender_id_info;
+        segment_info _recv_id_info;
+        segment_info _msg_length_info;
     };
 
 }

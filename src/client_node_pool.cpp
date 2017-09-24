@@ -40,6 +40,33 @@ namespace livemap {
             callback(std::const_pointer_cast<const client_node>(tmp_ptr.lock()));
 		}
 	}
+    
+    void client_node_pool::save_msg(int sender_id, int receiver_id, std::string msg)
+    {
+        _node_msg_pool.insert({receiver_id, std::make_pair(sender_id, msg)});
+        
+    }
+    
+    bool client_node_pool::msg_check(int id)
+    {
+        auto search = _node_msg_pool.find(id);
+        
+        if ( search != _node_msg_pool.end() ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    std::pair<int, std::string> client_node_pool::get_msg(int id)
+    {
+        
+        auto search = _node_msg_pool.find(id);
+        _node_msg_pool.erase(id);
+
+        auto pair = search->second;
+        return std::make_pair(pair.first, pair.second);
+    }
 }
 }
 
