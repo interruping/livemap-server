@@ -75,7 +75,7 @@ namespace livemap {
                 if ( node_db.msg_check(request_node_s->get_id()) ) {
                     auto sender_id_and_msg = node_db.get_msg(request_node_s->get_id());
                     utf8_message_send to_send_msg(sender_id_and_msg.first, request_node_s->get_id(), sender_id_and_msg.second);
-                    
+                    std::cout << "message_sended to " << request_node_s->get_id() << std::endl;
                     int type = utf8_message_send::type;
                     *result_buffer = new char[to_send_msg.get_entire_size() + sizeof(command_type)];
                     std::memcpy(*result_buffer, &type, sizeof(command_type));
@@ -154,7 +154,8 @@ namespace livemap {
             case utf8_message_send::type : {
                 utf8_message_send receive_msg(raw_request + 4, raw_request_size - 4);
                 node_db.save_msg(receive_msg.sender_id(), receive_msg.recv_id(), receive_msg.get_msg());
-            
+                std::cout << "message_recieved from " << receive_msg.sender_id() << " to " << receive_msg.recv_id() << " msg : " << receive_msg.get_msg() << std::endl;
+                
                 
                 *result_buffer = new char[4];
                 int type =command_form_base::type;
@@ -164,6 +165,24 @@ namespace livemap {
                 return 4;
             }
             case command_form_base::type : {
+                
+                if ( node_db.msg_check(request_node_s->get_id()) ) {
+                    auto sender_id_and_msg = node_db.get_msg(request_node_s->get_id());
+                    utf8_message_send to_send_msg(sender_id_and_msg.first, request_node_s->get_id(), sender_id_and_msg.second);
+                    
+                    std::cout << "message_sended to " << request_node_s->get_id() << std::endl;
+                    
+                    int type = utf8_message_send::type;
+                    *result_buffer = new char[to_send_msg.get_entire_size() + sizeof(command_type)];
+                    std::memcpy(*result_buffer, &type, sizeof(command_type));
+                    
+                    to_send_msg.serialize(*result_buffer + sizeof(command_type));
+                    
+                    return to_send_msg.get_entire_size() + sizeof(command_type);
+                    
+                }
+                
+                
                 *result_buffer = new char[4];
                 int type =command_form_base::type;
                 

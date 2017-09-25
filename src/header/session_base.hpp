@@ -86,7 +86,7 @@ namespace solarcode {
             virtual void set_delegate(session_io_delegate *delegate)
             {
 #ifdef _DEBUG_
-                SC_DBGMSG("session_io_delegate set.");
+                //SC_DBGMSG("session_io_delegate set.");
 #endif
                 _delegate.reset(delegate);
             }
@@ -97,7 +97,7 @@ namespace solarcode {
             virtual session_io_delegate* get_delegate() const
             {
 #ifdef _DEBUG_
-                SC_DBGMSG("session_io_delegate get.");
+                //SC_DBGMSG("session_io_delegate get.");
 #endif
                 return _delegate.get();
             }
@@ -108,7 +108,7 @@ namespace solarcode {
             virtual std::shared_ptr<void> get_socket() const
             {
 #ifdef _DEBUG_
-                SC_DBGMSG("socket object returned.");
+                //SC_DBGMSG("socket object returned.");
 #endif
                 return _socket;
             }

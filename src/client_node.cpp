@@ -61,7 +61,8 @@ namespace solarcode {
         void client_node::set_coordinate(const coordinate&& location)
         {
 #ifdef _DEBUG_
-            SC_DBGMSG("input coordinate info: lat - " << location.latitude  << "lon - " << location.longitude );
+        
+            SC_DBGMSG("node id is "<< get_id() <<"input coordinate info: lat - " << location.latitude  << "lon - " << location.longitude );
 #endif
             
             _latitude = location.latitude;

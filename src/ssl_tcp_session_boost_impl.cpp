@@ -93,13 +93,13 @@ namespace livemap {
             if ( error ) {
                 //에러가 발생하였을 때 처리
 #ifdef _DEBUG_
-                SC_DBGMSG("error occure before socket read process.");
+                //SC_DBGMSG("error occure before socket read process.");
 #endif
                 
             } else {
                 //정상 읽기 작업 수행
 #ifdef _DEBUG_
-                SC_DBGMSG("read start socket read.");
+                //SC_DBGMSG("read start socket read.");
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
@@ -152,12 +152,12 @@ namespace livemap {
             if ( error ) {
                 //에러가 발생하였을 때 처리
 #ifdef _DEBUG_
-                SC_DBGMSG("error occure before write process.");
+                //SC_DBGMSG("error occure before write process.");
 #endif
             } else {
                 //정상 읽기 작업 수행
 #ifdef _DEBUG_
-                SC_DBGMSG("start socket writes.");
+                //SC_DBGMSG("start socket writes.");
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
