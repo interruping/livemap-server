@@ -12,11 +12,15 @@
 
 namespace solarcode {
 namespace livemap {
+    /*!
+     생성자 구현.
+     디폴트 구현 클래스는 ssl_tcp_server_boost_impl 클래스.
+     */
     ssl_tcp_server::ssl_tcp_server()
     :server_base(),
-    _pimple(nullptr)
+    _pimpl(nullptr)
     {
-        _pimple.reset(new ssl_tcp_server_boost_impl());
+        _pimpl.reset(new ssl_tcp_server_boost_impl());
         
     }
 }

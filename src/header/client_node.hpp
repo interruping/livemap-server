@@ -6,7 +6,6 @@
 #include "id_manager.hpp"
 
 #include <stdint.h>
-
 #include <set>
 #include <string>
 #include <iostream>
