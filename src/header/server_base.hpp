@@ -73,16 +73,39 @@ namespace livemap {
          */
         virtual ~server_base () {};
 
+        /*
+         @breif session_builder_type은 세션 빌더 핸들 타입이다.
+         @detail 세션빌더 타입의 세션 빌더 함수 객체는 인자로 소켓 객체를 입력받고, 세션 객체를 생성하여 반환한다.
+         세션빌더는 세션 팩토리 함수이다.
+         */
+        typedef std::function<std::shared_ptr<session_base>(std::shared_ptr<void>)> session_builder_type;
+        
         /*!
-         @breif 클라이언트 연결 시작.
-         @detail 클라이언트로부터 오는 연결요청을 받아들이고 연결된 소켓 객체를 server_service_delegate 계열 클래스에 넘여준다.
+         @defgroup server_base_needs_impl 상속한 클래스에서 구현해야하는 맴버 함수 인터페이스 그룹.
+         @{
+         */
+       
+        /*!
+         @breif 클라이언트 연결 시작 인터페이스.
+         @detail 이 클래스를 상속하는 클래스에서는 클라이언트로부터 오는 연결요청을 받아들이는 작업을 시작하도록 구현해야한다.
          */
         virtual void start_service() = 0;
         /*!
-         @breif 클라이언트 연결 종료
-         @detail 클라이언트로부터 오는 연결요청을 받아들이는 작업을 종료한다.
+         @breif 클라이언트 연결 종료 인터페이스.
+         @detail 이 클래스를 상속하는 클래스에서는 클라이언트로부터 오는 연결요청을 받아들이는 작업을 종료하도록 구현해야한다.
          */
         virtual void stop_service() = 0;
+        /*!
+         @breif 세션 빌더 함수 객체를 반환하는 인터페이스.
+         @detail session_builder_type형 함수객체를 반환한다 이 함수객체에는 세션을 생성할 수 있는 구현이 포함되어 있다.
+         */
+        virtual session_builder_type get_session_builder () const = 0;
+        
+        /*!
+         @}
+         */ //end of server_base_needs_impl.
+        
+        
         /*!
          @breif server_service_delegate 계열 클래스 객체를 설정하는 setter 함수.
          @detail 이 함수를 통해 server_service_delegate 계열 객체를 설정하게 되면
@@ -105,15 +128,7 @@ namespace livemap {
             return _delegate.get();
         }
         
-        /*
-         @breif session_builder_type은 세션 빌더 핸들 타입이다.
-         @detail 세션빌더 타입의 세션 빌더 함수 객체는 인자로 소켓 객체를 입력받고, 세션 객체를 생성하여 반환한다.
-                 세션빌더는 세션 팩토리 함수이다.
-         */
-        typedef std::function<std::shared_ptr<session_base>(std::shared_ptr<void>)> session_builder_type;
-        
-        
-        virtual session_builder_type get_session_builder () const = 0;
+
     protected:
         /*!
          @breif 기본 생성자

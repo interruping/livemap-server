@@ -6,7 +6,7 @@ namespace livemap {
 
     ssl_tcp_session::ssl_tcp_session(std::shared_ptr<void> socket)
     :session_base(socket),
-    _pimple(new ssl_tcp_session_boost_impl(socket))
+    _pimpl(new ssl_tcp_session_boost_impl(socket))
     {
         
     }

@@ -27,7 +27,8 @@ namespace livemap {
         ssl_tcp_server();
         
         /*!
-         @defgroup server_base로 상속받은 매서드들.
+         @ingroup server_base_needs_impl
+         @defgroup ssl_tcp_server_impl server_base로 상속받아 구현된 함수들.
          @{
          */
         //구현 클래스에 위임
@@ -37,21 +38,35 @@ namespace livemap {
         virtual void stop_service() {
             _pimpl->stop_service();
         }
+        virtual session_builder_type get_session_builder () const {
+            return _pimpl->get_session_builder();
+        }
+        /*!
+         @}
+         */ //end of ssl_tcp_server_impl
+        
+        /*!
+         @ingroup ssl_tcp_server_impl
+         @defgroup ssl_tcp_server_impl_redef server_base의 구현을 재정의한 함수 그룹.
+         @{
+         */
+        //pimpl 패턴을 위한 재정의.
         virtual void set_delegate(server_service_delegate* delegate) {
             _pimpl->set_delegate(delegate);
         }
         virtual server_service_delegate* get_delegate() const {
             return _pimpl->get_delegate();
         }
-        virtual session_builder_type get_session_builder () const {
-            return _pimpl->get_session_builder();
-        }
         /*!
          @}
-         */
+         */ // end of ssl_tcp_server_impl_redef
+        
     private:
         /*!
-         @breif 구현 클래스의 주소를 가리키는 pimpl.
+         @breif 구현 클래스의 객체 주소를 가리키는 pimpl.
+         @detail 구현 클래스의 객체 주소를 unique_ptr로 wrapping 하였음.
+                 구현 클래스의 객체 수명을 ssl_tcp_server 클래스가 구현 클래스 객체의 수명을 관리함.
+                 ssl_tcp_server 클래스 객체가 소멸될 때 구현 클래스의 객체도 같이 소멸됨.
          */
         std::unique_ptr<server_base> _pimpl;
         
