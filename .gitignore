@@ -1,0 +1,30 @@
+# mac os .DS_Store file ignore
+.DS_Store
+# cmake generate file ignore
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# build product ignore
+build/release/**
+bulld/debug/**
+!build/debug/server.crt
+!build/debug/server.key
+!build/debug/dh512.pem
+!build/debug/dylib/
+testclient/build/debug/**
+!testclient/build/debug/server.crt
+server
+libcommandbinder.*
+test_client
+
+#Xcode generate files
+
+*.xcodeproj
+*.build
