@@ -35,7 +35,7 @@ std::string time_in_HH_MM_SS_MMM()
     std::ostringstream oss;
     
     char buffer[80] = {0,};
-    strftime(buffer, sizeof(buffer), "%T", &bt);
+    strftime(buffer, sizeof(buffer), "%Y/%m/%d-%H:%M:%S", &bt);
     
     oss << buffer; // HH:MM:SS
     oss << '.' << std::setfill('0') << std::setw(3) << ms.count();
