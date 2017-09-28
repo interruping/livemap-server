@@ -1,76 +1,45 @@
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::                                                                         :*/
-/*::  This routine calculates the distance between two points (given the     :*/
-/*::  latitude/longitude of those points). It is being used to calculate     :*/
-/*::  the distance between two locations using GeoDataSource(TM) products.   :*/
-/*::                                                                         :*/
-/*::  Definitions:                                                           :*/
-/*::    South latitudes are negative, east longitudes are positive           :*/
-/*::                                                                         :*/
-/*::  Passed to function:                                                    :*/
-/*::    lat1, lon1 = Latitude and Longitude of point 1 (in decimal degrees)  :*/
-/*::    lat2, lon2 = Latitude and Longitude of point 2 (in decimal degrees)  :*/
-/*::    unit = the unit you desire for results                               :*/
-/*::           where: 'M' is statute miles (default)                         :*/
-/*::                  'K' is kilometers                                      :*/
-/*::                  'N' is nautical miles                                  :*/
-/*::  Worldwide cities and other features databases with latitude longitude  :*/
-/*::  are available at http://www.geodatasource.com                          :*/
-/*::                                                                         :*/
-/*::  For enquiries, please contact sales@geodatasource.com                  :*/
-/*::                                                                         :*/
-/*::  Official Web site: http://www.geodatasource.com                        :*/
-/*::                                                                         :*/
-/*::           GeoDataSource.com (C) All Rights Reserved 2015                :*/
-/*::                                                                         :*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-#ifdef __cplusplus
+/*!
+ @file geo_calc_distance.h
+ @copyright CC BY-SA 3.0
+ @see https://creativecommons.org/licenses/by-sa/3.0/
+ @author https://stackoverflow.com/a/10205532/5766424
+ */
+ #ifdef __cplusplus
 extern "C" {
 #endif
 #include <math.h>
+    
+#define earthRadiusKm 6371.0
+    
+    // This function converts decimal degrees to radians
+    double deg2rad(double deg) {
+        return (deg * M_PI / 180);
+    }
 
-#define pi 3.14159265358979323846
+    //  This function converts radians to decimal degrees
+    double rad2deg(double rad) {
+        return (rad * 180 / M_PI);
+    }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::  Function prototypes                                           :*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-double deg2rad(double);
-double rad2deg(double);
-
-double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
-  double theta, dist;
-  theta = lon1 - lon2;
-  dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
-  dist = acos(dist);
-  dist = rad2deg(dist);
-  dist = dist * 60 * 1.1515;
-  switch(unit) {
-    case 'M':
-      break;
-    case 'K':
-      dist = dist * 1.609344;
-      break;
-    case 'N':
-      dist = dist * 0.8684;
-      break;
-  }
-  return (dist);
-}
-
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::  This function converts decimal degrees to radians             :*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-double deg2rad(double deg) {
-  return (deg * pi / 180);
-}
-
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::  This function converts radians to decimal degrees             :*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-double rad2deg(double rad) {
-  return (rad * 180 / pi);
-}
-
+    /**
+     * Returns the distance between two points on the Earth.
+     * Direct translation from http://en.wikipedia.org/wiki/Haversine_formula
+     * @param lat1d Latitude of the first point in degrees
+     * @param lon1d Longitude of the first point in degrees
+     * @param lat2d Latitude of the second point in degrees
+     * @param lon2d Longitude of the second point in degrees
+     * @return The distance between the two points in kilometers
+     */
+    double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d) {
+        double lat1r, lon1r, lat2r, lon2r, u, v;
+        lat1r = deg2rad(lat1d);
+        lon1r = deg2rad(lon1d);
+        lat2r = deg2rad(lat2d);
+        lon2r = deg2rad(lon2d);
+        u = sin((lat2r - lat1r)/2);
+        v = sin((lon2r - lon1r)/2);
+        return 2.0 * earthRadiusKm * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
+    }
 
 #ifdef __cplusplus
 }
