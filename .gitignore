@@ -28,3 +28,8 @@ test_client
 
 *.xcodeproj
 *.build
+
+#Doxygen generate file
+
+doc/*
+!doc/*.md
