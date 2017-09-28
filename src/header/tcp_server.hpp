@@ -27,8 +27,8 @@ namespace livemap {
         ssl_tcp_server();
         
         /*!
-         @ingroup server_base_needs_impl
-         @defgroup ssl_tcp_server_impl server_base로 상속받아 구현된 함수들.
+         @ingroup server_base_require_impl
+         @defgroup ssl_tcp_server_impl server_base 클래스로부터 상속되어 구현된 인터페이스 함수들.
          @{
          */
         //구현 클래스에 위임

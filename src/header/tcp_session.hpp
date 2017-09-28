@@ -31,8 +31,8 @@ namespace livemap {
         virtual ~ssl_tcp_session(){}
         
         /*!
-         @ingroup session_base_needs_impl
-         @defgroup ssl_tcp_session_impl session_base에서 상속받아 구현된 함수들.
+         @ingroup session_base_require_impl
+         @defgroup ssl_tcp_session_impl session_base로부터 상속받아 구현된 인터페이스 함수들.
          @{
          */
         //pimpl 패턴 구현.

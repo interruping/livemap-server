@@ -34,6 +34,10 @@ namespace livemap {
          @breif 가상 소멸자
          */
         virtual ~server_service_delegate() {}
+        /*! @defgroup server_service_delegate_require_impl server_service_delegate 클래스의 서브클래스가 구현해야하는 인터페이스들.
+         @{
+         */
+        
         /*!
          @breif server_base 클래스를 약한 참조하기 위한 클래스
          @detail server_base 클래스의 set_delegate 함수 안에서 호출된다.
@@ -56,7 +60,9 @@ namespace livemap {
          */
         virtual void error_occure(std::shared_ptr<void> socket ,std::shared_ptr<void> error) = 0;
 
-
+        /*!
+         @}
+         */ //end of server_service-delegate_require_impl
     };
 
     /*!
@@ -81,7 +87,7 @@ namespace livemap {
         typedef std::function<std::shared_ptr<session_base>(std::shared_ptr<void>)> session_builder_type;
         
         /*!
-         @defgroup server_base_needs_impl 상속한 클래스에서 구현해야하는 맴버 함수 인터페이스 그룹.
+         @defgroup server_base_require_impl server_base 클래스의 서브클래스에서 구현해야하는 인터페이스.
          @{
          */
        

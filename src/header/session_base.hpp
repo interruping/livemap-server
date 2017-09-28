@@ -31,15 +31,15 @@ namespace livemap {
         virtual ~session_io_delegate() {};
         
         /*!
-         @defgroup session_io_delegate_needs_impl 상속하는 클래스에서 구현해야하는 인터페이스
+         @defgroup session_io_delegate_require_impl session_io_delegate클래스의 서브 클래스에서 구현해야하는 인터페이스
          @{
          */
         
         /*!
          @breif 세션 객체가 클라이언트로부터 받은 데이터를 넘겨주는 함수.
-         @detail 클라이언트가 보낸 데이터 처리 구현이 이 함수에 구현하면 된다.
-                 클라이언트로부터 온 데이터는 buffer에 담겨오는데 이 함수 사용자는 buffer의 메모리 해제 책임이 없다.
-                 buffer의 메모리는 세션 객체가 관리한다.
+         @details 클라이언트가 보낸 데이터 처리 구현이 이 함수에 구현하면 된다.
+                  클라이언트로부터 온 데이터는 buffer에 담겨오는데 이 함수 사용자는 buffer의 메모리 해제 책임이 없다.
+                  buffer의 메모리는 세션 객체가 관리한다.
          @param buffer 사용자로부터 읽은 raw data.
          @param buffer_length 사용자로부터 읽은 raw data 길이 (Byte 단위)
          */
@@ -47,11 +47,11 @@ namespace livemap {
         
         /*!
          @breif 세션 객체가 클라이언트로 데이터를 보내기 전 보낼 데이터를 결정하는 함수.
-         @detail 클라이언트로 보내고 싶은 데이터를 결정하여 buffer 변수에 쓰면 된다.
-                 buffer에 쓸 데이터만큼 정확하게 메모리를 직접할당하여야한다.
-                 buffer에 쓴 데이터 길이를 바이트 단위로 리턴해줘야 세션객체가 데이터를 보낼 수 있다.
-                 buffer에 쓴 길이와 리턴한 길이가 다를경우 그 세션은 만료된다.
-                 buffer에 할당한 메모리는 세션객체가 해제하므로 임의로 해제해선 안된다.
+         @details 클라이언트로 보내고 싶은 데이터를 결정하여 buffer 변수에 쓰면 된다.
+                  buffer에 쓸 데이터만큼 정확하게 메모리를 직접할당하여야한다.
+                  buffer에 쓴 데이터 길이를 바이트 단위로 리턴해줘야 세션객체가 데이터를 보낼 수 있다.
+                  buffer에 쓴 길이와 리턴한 길이가 다를경우 그 세션은 만료된다.
+                  buffer에 할당한 메모리는 세션객체가 해제하므로 임의로 해제해선 안된다.
          
          @code{.cpp}
          *buffer = new char[77]; // 할당한 버퍼 데이터 사이즈와
@@ -61,8 +61,8 @@ namespace livemap {
          */
         virtual std::size_t session_write_before_buffer(char ** buffer) = 0;
         /*
-         }@
-         */ //end of session_io_delegate_needs_impl
+         @}
+         */ //end of session_io_delegate_require_impl
         
     
     };
@@ -109,7 +109,7 @@ namespace livemap {
         }
         
         /*!
-         @defgroup session_base_needs_impl 세션 베이스 클래스의 서브 클래스가 구현해야하는 함수들.
+         @defgroup session_base_require_impl session_base 클래스의 서브 클래스가 구현해야하는 함수들.
          @{
          */
         
@@ -128,7 +128,7 @@ namespace livemap {
         
         /*!
          @}
-         */ //end of session_base_need_impl
+         */ //end of session_base_require_impl
         
         
         /*!
