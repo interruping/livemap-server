@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//
-//  ssl_tcp_session_boost_impl.cpp
-//  livemap_server
-//
-//  Created by Geon young Lim on 2017. 8. 26..
-//
-//
-
+/*!
+ @file ssl_tcp_session_boost_impl.cpp
+ @author GeunYoung Lim, interruping4dev@gmail.com
+ @date 2017. 8. 26.
+ */
 #include "ssl_tcp_session_boost_impl.hpp"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -105,13 +102,11 @@ namespace livemap {
         {
             
             if ( error ) {
-                //에러가 발생하였을 때 처리
 #ifdef _DEBUG_
                 //SC_DBGMSG("error occure before socket read process.");
 #endif
                 
             } else {
-                //정상 읽기 작업 수행
 #ifdef _DEBUG_
                 //SC_DBGMSG("read start socket read.");
 #endif
@@ -164,20 +159,14 @@ namespace livemap {
         void ssl_tcp_session_boost_impl::io_write_trigger(const boost::system::error_code& error)
         {
             if ( error ) {
-                //에러가 발생하였을 때 처리
 #ifdef _DEBUG_
                 //SC_DBGMSG("error occure before write process.");
 #endif
             } else {
-                //정상 읽기 작업 수행
 #ifdef _DEBUG_
                 //SC_DBGMSG("start socket writes.");
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
-                
-//                static const std::size_t buffer_length = 512;
-//                
-//                char tmp_raw_buffer[buffer_length] = {0,};
                 
                 session_io_delegate *io_delegate = get_delegate();
                 
@@ -188,10 +177,6 @@ namespace livemap {
                     size_of_data_to_write = io_delegate->session_write_before_buffer(&buffer);
                 }
 
-                
-//                for (int index = 0; index < size_of_data_to_write; index++) {
-//                    printf("\nbuffer to write: char[%d] = %2x", index, buffer[index]);
-//                }
                 
                 int header_data = size_of_data_to_write;
                 const int size_of_int = 4;

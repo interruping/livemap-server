@@ -39,10 +39,10 @@ namespace livemap {
          @breif 생성자
          */
         livemap_service_logic()
-        :service_logic_base(),
-        _session_builder(),
-        _id_manager(100),
-        _node_pool()
+        :service_logic_base()
+        , _session_builder()
+        , _id_manager(100)
+        , _node_pool()
         {
             
         }
@@ -72,7 +72,7 @@ namespace livemap {
         server_base::session_builder_type _session_builder;
         /*!
          @breif 스레드 동기화를 위한 mutex
-         @details id를 발급하는 _id_manager 객체와 사용자 노드 관리 객체인 _node_pool을 스레드 동기화한다.
+         @details id를 발급하는 _id_manager 객체와 사용자 노드 관리 객체인 _node_pooål을 스레드 동기화한다.
          */
         std::mutex _mutex_for_id_manager_and_node_pool;
         /*!

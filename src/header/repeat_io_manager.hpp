@@ -41,8 +41,8 @@ namespace livemap {
          @param session session_base 클래스 계역 객체 weak 포인터
          */
         repeat_io_manager(std::weak_ptr<session_base> session)
-        :session_io_manager_base(session),
-        _repeatBuffer()
+        : session_io_manager_base(session)
+        , _repeatBuffer()
         {
 
         }

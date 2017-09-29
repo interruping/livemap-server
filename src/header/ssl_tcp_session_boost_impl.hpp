@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-//
-//  ssl_tcp_session_boost_impl.hpp
-//  livemap_server
-//
-//  Created by Geon young Lim on 2017. 8. 26..
-//
-//
+/*!
+ @file ssl_tcp_session_boost_impl.hpp
+ @author GeunYoung Lim, interruping@naver.com
+ @date 2017. 8. 26.
+ */
 
 #ifndef ssl_tcp_session_boost_impl_h
 #define ssl_tcp_session_boost_impl_h
@@ -34,11 +31,10 @@ namespace livemap {
 
     
     /*!
-     @class boost_secure_tcp_session
-     @breif 부스트 라이브러리로 구현한 tcp 세션 객체
-     @detail n/a.
-     @namespace solarcode::livemap::boost_secure_tcp_session
-     @see tcp_session_base
+     @class ssl_tcp_session_boost_impl
+     @breif ssl 소켓 세션 부스트 라이브러리 구현
+     @details 부스트 asio로 구현한 ssl socket 세션 객체.
+     @see session_base
      */
     class ssl_tcp_session_boost_impl: public session_base,
     public std::enable_shared_from_this<ssl_tcp_session_boost_impl>
@@ -46,14 +42,19 @@ namespace livemap {
     public:
         /*!
          @breif 생성자
-         @param socket 소켓 객체
+         @details 연결된 ssl 소켓 객체를 받아 원격 클라이언트와 입출력 작업을 한다.
+         @param ssl socket 소켓 객체
          */
         explicit ssl_tcp_session_boost_impl(std::shared_ptr<void> socket)
-        :session_base(socket),//부모 초기화.
-        _io_trigger_timer(get_shared_io_service()),//타머어 초기화.
-        _strand_for_session(_io_trigger_timer.get_io_service()), //strand 초기화.
-        _io_service(_io_trigger_timer.get_io_service()),
-        _expire_callback([](){})
+        //부모 초기화
+        :session_base(socket)
+        //타머어 초기화
+        , _io_trigger_timer(get_shared_io_service())
+        //strand 초기화.
+        , _strand_for_session(_io_trigger_timer.get_io_service())
+        
+        , _io_service(_io_trigger_timer.get_io_service())
+        , _expire_callback([](){})
         {
 #ifdef _DEBUG_
             SC_DBGMSG("boost secure tcp session created.");
@@ -78,10 +79,17 @@ namespace livemap {
             
             
         }
-        
-        //override tcp_session_base class interface
+        /*!
+         @ingroup server_base_require_impl
+         @defgroup ssl_tcp_session_boost_impl_impl server_base 클래스에서 상속받아 구현한 인터페이스 함수들.
+         @{
+         */
         virtual void start();
         virtual void stop();
+        /*!
+         @}
+         */
+        
         /*!
          @breif 세션 만기 후 작업 프로시져 등록
          */

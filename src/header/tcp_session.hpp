@@ -90,9 +90,9 @@ namespace livemap {
     private:
         /*!
          @breif 구현 클래스의 객체 포인터
-         @detail unique_ptr로 wrapping 됨.
-                 ssl_tcp_session 클래스가 구현클래스의 수명을 관리한다.
-                 ssl_tcp_session 클래스가 소멸되면 구현클래스도 소멸된다.
+         @details unique_ptr로 wrapping 됨.
+                  ssl_tcp_session 클래스가 구현클래스의 수명을 관리한다.
+                  ssl_tcp_session 클래스가 소멸되면 구현클래스도 소멸된다.
          */
         std::unique_ptr<session_base> _pimpl;
     };

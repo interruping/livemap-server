@@ -29,10 +29,10 @@ namespace solarcode {
 namespace livemap {
     /*!
      @brief ssl 소켓 서버
-     @detail serer_base 클래스를 상속한 클래스.
-             ssl 소켓으로 클라이언트의 연결을 받아들인다.
-             내부에 구현이 있지 않고 구현 클래스는 따로 있다.
-             구현 클래스는 pimpl 패턴으로 이 클래스와 같이 사용됨.
+     @details serer_base 클래스를 상속한 클래스.
+              ssl 소켓으로 클라이언트의 연결을 받아들인다.
+              내부에 구현이 있지 않고 구현 클래스는 따로 있다.
+              구현 클래스는 pimpl 패턴으로 이 클래스와 같이 사용됨.
      */
     class ssl_tcp_server : public server_base {
     public:
@@ -79,9 +79,9 @@ namespace livemap {
     private:
         /*!
          @breif 구현 클래스의 객체 주소를 가리키는 pimpl.
-         @detail 구현 클래스의 객체 주소를 unique_ptr로 wrapping 하였음.
-                 구현 클래스의 객체 수명을 ssl_tcp_server 클래스가 구현 클래스 객체의 수명을 관리함.
-                 ssl_tcp_server 클래스 객체가 소멸될 때 구현 클래스의 객체도 같이 소멸됨.
+         @details 구현 클래스의 객체 주소를 unique_ptr로 wrapping 하였음.
+                  구현 클래스의 객체 수명을 ssl_tcp_server 클래스가 구현 클래스 객체의 수명을 관리함.
+                  ssl_tcp_server 클래스 객체가 소멸될 때 구현 클래스의 객체도 같이 소멸됨.
          */
         std::unique_ptr<server_base> _pimpl;
         

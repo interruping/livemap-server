@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//
-//  ssl_tcp_server_boost_impl.cpp
-//  livemap_server
-//
-//  Created by Geon young Lim on 2017. 8. 27..
-//
-//
+/*!
+ @file ssl_tcp_server_boost_impl.cpp
+ @author GeunYoung Lim, interruping4dev@gmail.com
+ @date 2017. 8. 27.
+ */
 
 #include "ssl_tcp_server_boost_impl.hpp"
 #include "debug_utility.hpp"
@@ -28,10 +26,9 @@
 
 namespace solarcode {
 namespace livemap {
-    /*!
-     @breif accept 작업 후 위임 delegate 위임작업 구현 (_strand_for_accept_hander 안에서 동기화 되어 실행 됨.)
-     @see boost_secure_tcp_server._strand_for_accept_handler
-     */
+    
+    //     accept 작업 후 위임 delegate 위임작업 구현 (_strand_for_accept_hander 안에서 동기화 되어 실행 됨.)
+    //     _strand_for_accept_handler로 wrapping됨.
     void ssl_tcp_server_boost_impl::accept_complete(std::shared_ptr<bst_ssl_tcp_socket> socket,const boost::system::error_code& error)
     {
         
@@ -64,19 +61,26 @@ namespace livemap {
 
 namespace solarcode {
 namespace livemap{
-    /*!
-     @breif 생성자 구현
-     */
+    
+    //  생성자 구현
     ssl_tcp_server_boost_impl::ssl_tcp_server_boost_impl()
-    :server_base(), //부모 초기화
-    _ios(get_shared_io_service()),//boost io_service 초기화
-    _work(_ios),
-    _acceptor(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1212)), //boost acceptor 최화
-    _context(boost::asio::ssl::context::tlsv12), //ssl 셋팅 초기화
-    _is_stopped_accept(false), //stop 플래그 초기화 default false.
-    _strand_for_acceptor(_ios), //스레드 동기화를 위한 strand 초기화 (for acceptor)
-    _strand_for_acceptor_handler(_ios), // 스레드 동기화를 위한 strand 초기화 (for accept handler)
-    _thread_group() //스레드 그룹 초기화
+    //부모 초기화
+    :server_base()
+    //boost io_service 초기화
+    , _ios(get_shared_io_service())
+    , _work(_ios)
+     //boost acceptor 최화
+    , _acceptor(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1212))
+    //ssl 셋팅 초기화
+    , _context(boost::asio::ssl::context::tlsv12)
+    //stop 플래그 초기화 default false.
+    , _is_stopped_accept(false)
+    //스레드 동기화를 위한 strand 초기화 (for acceptor)
+    , _strand_for_acceptor(_ios)
+    // 스레드 동기화를 위한 strand 초기화 (for accept handler)
+    , _strand_for_acceptor_handler(_ios)
+    // 스레드 동기화를 위한 strand 초기화 (for accept handler)
+    , _thread_group()
     {
 #ifdef _DEBUG_
         SC_DBGMSG("n/a.");
@@ -111,9 +115,8 @@ namespace livemap{
         _thread_group.join_all();
     }
     
-    /*!
-     @breif accept 작업 시작 요청 함수 구현
-     */
+    
+    //  작업 시작 요청 함수 구현
     void ssl_tcp_server_boost_impl::start_service()
     {
 #ifdef _DEBUG_
@@ -122,9 +125,8 @@ namespace livemap{
         _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_start_service, this)));
     }
     
-    /*!
-     @breif accept 작업 시작 함수 구현exi
-     */
+    
+    //    accept 작업 시작 함수 구현exi
     void ssl_tcp_server_boost_impl::_unsafe_start_service()
     {
 #ifdef _DEBUG_
@@ -148,13 +150,11 @@ namespace livemap{
                                                         boost::asio::placeholders::error));
         
         _acceptor.async_accept(new_socket->lowest_layer(), accept_complete_handler);
-        // accept 작업 계속 시작.
-        //start_accept();
     }
     
-    /*!
-     @breif accept 중단 작업 요청 함수 구현
-     */
+    
+    //  accept 중단 작업 요청 함수 구현
+    
     void ssl_tcp_server_boost_impl::stop_service()
     {
 #ifdef _DEBUG_
@@ -164,9 +164,8 @@ namespace livemap{
         _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_stop_service, this)));
     }
     
-    /*!
-     @breif accept 중단 작업 함수 구현
-     */
+    
+    //      accept 중단 작업 함수 구현
     void ssl_tcp_server_boost_impl::_unsafe_stop_service()
     {
 #ifdef _DEBUG_
@@ -176,6 +175,8 @@ namespace livemap{
         _is_stopped_accept = true;
     }
     
+    //  세션 빌더 리턴
+    // ssl_tcp_session 클래스 객체를 생성하는 구현 반환.
     server_base::session_builder_type ssl_tcp_server_boost_impl::get_session_builder() const
     {
         session_builder_type session_builder = [](std::shared_ptr<void> socket) {
