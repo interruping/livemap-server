@@ -65,6 +65,8 @@ namespace livemap {
                 
                 begin = rhs.begin;
                 size = rhs.size;
+                
+                return *this;
             }
             
             std::size_t begin;
