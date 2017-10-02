@@ -105,7 +105,7 @@ namespace livemap {
         @param command 콜백 함수 
         */
         command_form_base_t(const char * const input_data, const std::size_t input_data_size)
-        :_segment_lastest_index(0),
+        :_segment_lastest_index(input_data_size),
         _segment_pool()
         {
             std::copy(input_data, input_data + input_data_size, std::back_inserter(_segment_pool));
