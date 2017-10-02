@@ -131,11 +131,10 @@ namespace livemap {
                     
                     coordinate other_node_coord = other_node_s->getCoordinate();
                     
-                    double calc_distance = distance(request_node_coord.latitude,
+                    double calc_distance = distanceEarth(request_node_coord.latitude,
                                                     request_node_coord.longitude,
                                                     other_node_coord.latitude,
-                                                    other_node_coord.longitude
-                                                    , 'k');
+                                                    other_node_coord.longitude);
                     
                     if ( calc_distance <= 1.0 ) {
                         client_node new_near_node(*other_node_s);
