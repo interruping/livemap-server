@@ -94,7 +94,7 @@ namespace livemap {
                   ssl_tcp_session 클래스가 구현클래스의 수명을 관리한다.
                   ssl_tcp_session 클래스가 소멸되면 구현클래스도 소멸된다.
          */
-        std::unique_ptr<session_base> _pimpl;
+        std::shared_ptr<session_base> _pimpl;
     };
     
 }
