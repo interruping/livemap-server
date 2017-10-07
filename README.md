@@ -36,16 +36,16 @@ LiveMapServer 프로젝트는 release용 빌드와 debug용 빌드를 할 수 �
 
 release용으로 빌드하기 (아래)
 
-$cmake . -DCMAKE_BUILD_TYPE=release
-$make
+    $ cmake . -DCMAKE_BUILD_TYPE=release
+    $ make
 
 debug용으로 빌드하기(아래)
 
-$cmake . -DCMAKE_BUILD_TYPE=debug
-$make
+    $ cmake . -DCMAKE_BUILD_TYPE=debug
+    $ make
 
 빌드에 관한 더 자세한 정보는
-[BUILD.md]() 파일을 참조.
+[BUILD.md](https://github.com/interruping/livemap-server/blob/Develop/BUILD) 파일을 참조.
 
 제한사항
 ===========
@@ -58,4 +58,4 @@ $make
 
 라이센스
 =======
-이 프로젝트는 Apache License 2.0 라이센스를 따릅니다. 자세한 사항은 [LICENSE.txt]()파일을 참조하세요.
+이 프로젝트는 Apache License 2.0 라이센스를 따릅니다. 자세한 사항은 [LICENSE.txt](https://github.com/interruping/livemap-server/blob/Develop/LICENSE)파일을 참조하세요.
