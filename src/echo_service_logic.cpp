@@ -44,8 +44,11 @@ namespace livemap {
         new_session->start();
     }
     
-    void echo_service_logic::error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error){
-        
+    void echo_service_logic::error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error)
+    {
+        //do nothing...
+        socket = socket;
+        error = error;
     }
 
 }

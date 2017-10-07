@@ -64,22 +64,9 @@ namespace livemap{
 
 		*handle = dlopen(COMMAND_BINDER_LIB_PATH, RTLD_NOW|RTLD_GLOBAL);
 
-		if ( *handle == nullptr ) {
-            char * const link_error = dlerror();
-		}
-
-        typedef void(*findme_t)(int);
-        
 		command_binder_type dyload_func;
 
-        
 		dyload_func = (command_binder_type)dlsym(*handle, GO_BIND_COMMAND_SYMBOL);
-
-		char * const link_error = dlerror();
-
-		if ( link_error == nullptr ) {
-
-		}
 
 		return dyload_func;
 

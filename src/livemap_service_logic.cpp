@@ -73,8 +73,10 @@ namespace livemap {
         
     }
     
-    void livemap_service_logic::error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error) {
-        
+    void livemap_service_logic::error_occure(std::shared_ptr<void> socket, std::shared_ptr<void> error)
+    {
+        socket = socket;
+        error = error;
     }
 }
 }
