@@ -8,5 +8,7 @@ set ( PROJECT_VERSION_MINOR 0 )
 set ( PROJECT_VERSION_PATCH 0 )
 set ( PROJECT_VERSION_TWEAK 0 )
 
+configure_file( ${CMAKE_SOURCE_DIR}/livemapserver_config.h.in ${CMAKE_SOURCE_DIR}/src/header/livemapserver_config.h )
+
 add_subdirectory( src ) 
 
