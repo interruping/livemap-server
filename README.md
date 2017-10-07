@@ -45,7 +45,7 @@ debug용으로 빌드하기(아래)
     $ make
 
 빌드에 관한 더 자세한 정보는
-[BUILD.md](https://github.com/interruping/livemap-server/blob/Develop/BUILD) 파일을 참조.
+[BUILD.md](https://github.com/interruping/livemap-server/blob/Develop/BUILD.md) 파일을 참조.
 
 제한사항
 ===========
