@@ -25,7 +25,7 @@
 #define SC_DBGMSG(x) \
         { \
             std::cout << "[" << time_in_HH_MM_SS_MMM() << "]" \
-            << " : " << "notification : " << x << " in " << __func__ << std::endl; \
+            << " : " << "debug msg : " << x << " < function : " << __func__ << " > " << std::endl; \
         }    
             
 namespace {

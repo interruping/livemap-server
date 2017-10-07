@@ -65,6 +65,7 @@ namespace livemap {
             return 0;
         }
         
+        printf("service type received -- %d\n", read_service_type(raw_request));
 		switch(read_service_type(raw_request)){
             case request_user_info::type : {
                 

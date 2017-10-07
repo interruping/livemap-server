@@ -84,17 +84,24 @@ namespace livemap {
         
         void ssl_tcp_session_boost_impl::handshake_complete(const boost::system::error_code &error)
         {
+            
+            if ( error ) {
+#ifdef _DEBUG_
+                SC_DBGMSG("handshake fail. error:" << error.message() );
+#endif
+            }
 #ifdef _DEBUG_
             SC_DBGMSG("handshake complete start socket read.");
 #endif
             
-            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(1000));
+            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(10000));
             
             auto safe_wait_read
             = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,
                                                    shared_from_this(),
                                                    boost::asio::placeholders::error));
 
+            
             _io_trigger_timer.async_wait(safe_wait_read);
         }
         
@@ -103,12 +110,12 @@ namespace livemap {
             
             if ( error ) {
 #ifdef _DEBUG_
-                //SC_DBGMSG("error occure before socket read process.");
+                SC_DBGMSG( "error occure before socket read process." << error.message() );
 #endif
-                
+                return;
             } else {
 #ifdef _DEBUG_
-                //SC_DBGMSG("read start socket read.");
+                SC_DBGMSG( "read start socket read." );
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
@@ -151,7 +158,7 @@ namespace livemap {
                 = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_write_trigger,
                                                        shared_from_this(),
                                                        boost::asio::placeholders::error));
-                
+                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(3000));
                 _io_trigger_timer.async_wait(safe_wait_write);
             }
         }
@@ -160,11 +167,13 @@ namespace livemap {
         {
             if ( error ) {
 #ifdef _DEBUG_
-                //SC_DBGMSG("error occure before write process.");
+                SC_DBGMSG( "error occure before write process. error: " << error.message() );
+                
+                return;
 #endif
             } else {
 #ifdef _DEBUG_
-                //SC_DBGMSG("start socket writes.");
+                SC_DBGMSG( "start socket writes." );
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
@@ -198,6 +207,7 @@ namespace livemap {
                                                        shared_from_this(),
                                                        boost::asio::placeholders::error));
                 
+                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(3000));
                 _io_trigger_timer.async_wait(safe_wait_read);
             }
         }

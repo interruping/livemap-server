@@ -67,17 +67,9 @@ namespace livemap {
     {
         std::unique_lock<std::mutex> lock_for_buffer(_mutex_for_buffer);
         
-        //_cv_for_buffer.wait(lock_for_buffer);
-        //char *buffer_to_return = *buffer;
-//        for (int index = 0; index < _buffer_size; index++ ) {
-//            printf("\n _buffer index: %d data: %2x", index, _buffer[index]);
-//        }
-//        
         *buffer = _buffer;
         
-//        for (int index = 0; index < _buffer_size; index++ ) {
-//            printf("\n *buffer index: %d data: %2x", index, (*buffer)[index]);
-//        }
+
         _buffer = nullptr;
         std::size_t size_to_return = _buffer_size;
         _buffer_size = 0;
