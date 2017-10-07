@@ -23,6 +23,8 @@
 
 #include <functional>
 
+#include "livemapserver_config.h"
+
 #include "session_base.hpp"
 #include "boost_asio_helper.hpp"
 

@@ -24,6 +24,8 @@
 #ifndef SOLARCODE_LIVEMAP_TCP_SESSION
 #define SOLARCODE_LIVEMAP_TCP_SESSION
 
+#include "livemapserver_config.h"
+
 #include "debug_utility.hpp"
 #include "session_base.hpp"
 

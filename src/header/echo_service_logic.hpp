@@ -24,7 +24,10 @@
 #ifndef echo_service_logic_h
 #define echo_service_logic_h
 
+#include "livemapserver_config.h"
+
 #include "service_logic_base.hpp"
+
 #include <memory>
 
 namespace solarcode {

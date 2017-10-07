@@ -22,6 +22,8 @@
 #ifndef service_logic_base_h
 #define service_logic_base_h
 
+#include "livemapserver_config.h"
+
 #include "server_base.hpp"
 
 #include <memory>

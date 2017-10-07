@@ -24,6 +24,8 @@
 #ifndef SRC_HEADER_SOLARCODE_COMMAND_BINDER_HPP_
 #define SRC_HEADER_SOLARCODE_COMMAND_BINDER_HPP_
 
+#include "livemapserver_config.h"
+
 #include "client_node_pool.hpp"
 
 #include <vector>

@@ -23,6 +23,8 @@
 #ifndef SOLARCODE_LIVEMAP_ID_MANAGER
 #define SOLARCODE_LIVEMAP_ID_MANAGER
 
+#include "livemapserver_config.h"
+
 #include <stdint.h>
 #include <map>
 

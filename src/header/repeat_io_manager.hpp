@@ -22,6 +22,8 @@
 #ifndef repeat_io_manager_h
 #define repeat_io_manager_h
 
+#include "livemapserver_config.h"
+
 #include <vector>
 
 #include "session_io_manager_base.hpp"

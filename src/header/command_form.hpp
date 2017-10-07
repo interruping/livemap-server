@@ -24,6 +24,8 @@
 #ifndef SOLARCODE_LIVEMAP_COMMAND_FORM
 #define SOLARCODE_LIVEMAP_COMMAND_FORM
 
+#include "livemapserver_config.h"
+
 #include <stdint.h>
 #include <cstring>
 #include <vector>

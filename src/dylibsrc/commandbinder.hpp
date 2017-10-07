@@ -29,7 +29,6 @@
 
 #include "service_command.hpp"
 
-
 extern "C"{
     std::size_t do_command_bind(std::weak_ptr<solarcode::livemap::client_node> request_node ,
                                 solarcode::livemap::client_node_pool& node_db ,

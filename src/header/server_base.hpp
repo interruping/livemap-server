@@ -22,6 +22,8 @@
 #ifndef server_base_h
 #define server_base_h
 
+#include "livemapserver_config.h"
+
 #include <memory>
 #include <functional>
 

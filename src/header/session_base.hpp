@@ -21,6 +21,8 @@
 #ifndef session_base_h
 #define session_base_h
 
+#include "livemapserver_config.h"
+
 #include "debug_utility.hpp"
 
 #include <memory>

@@ -16,6 +16,7 @@
 #ifndef SOLARCODE_LIVEMAP_CLIENT_NODE
 #define SOLARCODE_LIVEMAP_CLIENT_NODE
 
+#include "livemapserver_config.h"
 
 #include "id_manager.hpp"
 

@@ -21,6 +21,8 @@
 #ifndef ssl_tcp_server_boost_impl_h
 #define ssl_tcp_server_boost_impl_h
 
+#include "livemapserver_config.h"
+
 #include "boost_asio_helper.hpp"
 #include "server_base.hpp"
 

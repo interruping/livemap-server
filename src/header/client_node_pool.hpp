@@ -23,6 +23,9 @@
 
 #ifndef SRC_HEADER_SOLARCODE_LIVEMAP_NODE_DATABASE_HPP_
 #define SRC_HEADER_SOLARCODE_LIVEMAP_NODE_DATABASE_HPP_
+
+#include "livemapserver_config.h"
+
 #include <memory>
 #include <functional>
 #include <mutex>

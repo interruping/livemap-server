@@ -137,7 +137,7 @@ namespace livemap {
                                                     other_node_coord.latitude,
                                                     other_node_coord.longitude);
                     
-                    if ( calc_distance <= 1.0 ) {
+                    if ( calc_distance <= LMS_CFG_DETECTABLE_DISTANCE_KILOMETER ) {
                         client_node new_near_node(*other_node_s);
                         
                         near_nodes.push_back(new_near_node);
@@ -157,11 +157,6 @@ namespace livemap {
                 
                 near_node_info_command.serialize(*result_buffer + sizeof(type));
                
-
-//                for ( int index = 0; index < buffer_size; index++ ){
-//                    printf("\n *result_buffer index: %d data: %2x", index, (*result_buffer)[index]);
-//                }
-                
                 return near_node_info_command.get_entire_size() + sizeof(type);
                 
                 break;

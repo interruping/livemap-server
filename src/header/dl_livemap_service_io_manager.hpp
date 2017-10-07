@@ -23,6 +23,8 @@
 #ifndef dl_livemap_service_io_manager_h
 #define dl_livemap_service_io_manager_h
 
+#include "livemapserver_config.h"
+
 #include "session_io_manager_base.hpp"
 #include "client_node_pool.hpp"
 #include "debug_utility.hpp"

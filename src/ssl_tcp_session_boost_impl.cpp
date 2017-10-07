@@ -94,7 +94,7 @@ namespace livemap {
             SC_DBGMSG("handshake complete start socket read.");
 #endif
             
-            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(10000));
+            _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(LMS_CFG_RW_IO_INTERVAL_MILISECOND));
             
             auto safe_wait_read
             = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_read_trigger,
@@ -158,7 +158,7 @@ namespace livemap {
                 = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::io_write_trigger,
                                                        shared_from_this(),
                                                        boost::asio::placeholders::error));
-                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(3000));
+                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(LMS_CFG_RW_IO_INTERVAL_MILISECOND));
                 _io_trigger_timer.async_wait(safe_wait_write);
             }
         }
@@ -207,7 +207,7 @@ namespace livemap {
                                                        shared_from_this(),
                                                        boost::asio::placeholders::error));
                 
-                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(3000));
+                _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(LMS_CFG_RW_IO_INTERVAL_MILISECOND));
                 _io_trigger_timer.async_wait(safe_wait_read);
             }
         }

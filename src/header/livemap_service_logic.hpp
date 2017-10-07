@@ -20,6 +20,8 @@
 #ifndef livemap_service_logic_h
 #define livemap_service_logic_h
 
+#include "livemapserver_config.h"
+
 #include <mutex>
 
 #include "service_logic_base.hpp"

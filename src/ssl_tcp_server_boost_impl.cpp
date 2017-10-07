@@ -91,9 +91,9 @@ namespace livemap{
                              boost::asio::ssl::context::default_workarounds |
                              boost::asio::ssl::context::no_sslv2 |
                              boost::asio::ssl::context::single_dh_use );
-        _context.use_certificate_chain_file("server.crt");
-        _context.use_private_key_file("server.key", boost::asio::ssl::context::pem);
-        _context.use_tmp_dh_file("dh2048.pem");
+        _context.use_certificate_chain_file(LMS_CFG_SSL_SOCKET_SERVER_CERTIFICATE_CHAIN_FILE);
+        _context.use_private_key_file(LMS_CFG_SSL_SOCKET_SERVER_PRIVATE_KEY_FILE, boost::asio::ssl::context::pem);
+        _context.use_tmp_dh_file(LMS_CFG_SSL_SOCKET_SERVER_TMP_DH_PARAM_FILE);
         
         uint32_t thread_num = 4;
         

@@ -23,6 +23,8 @@
 #ifndef session_io_manager_base_h
 #define session_io_manager_base_h
 
+#include "livemapserver_config.h"
+
 #include <memory>
 #include "session_base.hpp"
 #include "client_node.hpp"

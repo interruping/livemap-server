@@ -21,6 +21,8 @@
 #ifndef SOLARCODE_LIVEMAP_TCP_SERVER
 #define SOLARCODE_LIVEMAP_TCP_SERVER
 
+#include "livemapserver_config.h"
+
 #include "server_base.hpp"
 
 #include <memory>

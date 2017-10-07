@@ -24,6 +24,8 @@
 #ifndef dl_livemap_service_io_manager_boost_impl_h
 #define dl_livemap_service_io_manager_boost_impl_h
 
+#include "livemapserver_config.h"
+
 #include <condition_variable>
 #include <mutex>
 
