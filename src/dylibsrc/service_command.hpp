@@ -190,7 +190,7 @@ namespace livemap {
             const int sizeof_lat = 8;
             const int sizeof_lon = 8;
             
-            int start_begin = 0;
+            int start_begin = 4;
             
             for ( int index = 0; index < read_num_of_near_node_info; index++ ) {
                 segment_info id_seginfo(start_begin, sizeof_id);
