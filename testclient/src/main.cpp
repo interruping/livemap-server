@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
         boost::asio::io_service io_service;
 
         boost::asio::ip::tcp::resolver resolver(io_service);
-        boost::asio::ip::tcp::resolver::query query(argv[1], argv[2]);
+        boost::asio::ip::tcp::resolver::query query("localhost", "1212");
         boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
 
         boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);

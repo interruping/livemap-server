@@ -4,11 +4,12 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
+#include <climits>
+
+#include "service_command.hpp"
+
 namespace solarcode{
 namespace livemap{
-
-
-enum { max_length = 1024 };
 
 class client
 {
@@ -30,14 +31,6 @@ public:
   bool verify_certificate(bool preverified,
       boost::asio::ssl::verify_context& ctx)
   {
-    // The verify callback can be used to check whether the certificate that is
-    // being presented is valid for the peer. For example, RFC 2818 describes
-    // the steps involved in doing this for HTTPS. Consult the OpenSSL
-    // documentation for more details. Note that the callback is called once
-    // for each certificate in the certificate chain, starting from the root
-    // certificate authority.
-
-    // In this example we will simply print the certificate's subject name.
     char subject_name[256];
     X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
     X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
@@ -64,15 +57,9 @@ public:
   {
     if (!error)
     {
-      std::cout << "Enter message: ";
-      std::cin.getline(request_, max_length);
-      size_t request_length = strlen(request_);
 
-      boost::asio::async_write(socket_,
-          boost::asio::buffer(request_, request_length),
-          boost::bind(&client::handle_write, this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred));
+        test_command();
+
     }
     else
     {
@@ -80,42 +67,193 @@ public:
     }
   }
 
-  void handle_write(const boost::system::error_code& error,
-      size_t bytes_transferred)
-  {
-    if (!error)
+    void test_command ()
     {
-      boost::asio::async_read(socket_,
-          boost::asio::buffer(reply_, bytes_transferred),
-          boost::bind(&client::handle_read, this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred));
-    }
-    else
-    {
-      std::cout << "Write failed: " << error.message() << "\n";
-    }
-  }
+        std::cout << "Start test." << std::endl;
+        //request_user_info test
+        {
+            request_user_info request_user_info_cmd;
+            
+            const int alloc_size = request_user_info_cmd.get_entire_size() + 4;
+            char *buffer = new char[alloc_size];
+            int type = request_user_info::type;
+            
+            std::memcpy(buffer, &type, 4);
+            
+            boost::system::error_code error;
+            
+            int header =  alloc_size;
+            
+            boost::asio::write(socket_, boost::asio::buffer(&header, 4),boost::asio::transfer_all(), error);
+            error_handle(error);
+            
+            request_user_info_cmd.serialize(buffer + 4);
+            
+            boost::asio::write(socket_, boost::asio::buffer(buffer, header), boost::asio::transfer_all(), error);
+            error_handle(error);
+        
+            int read_header;
+            
+            socket_.read_some(boost::asio::buffer(&read_header, 4), error);
+            error_handle(error);
+            
+            char *read_buffer = new char[read_header];
+            
+            socket_.read_some(boost::asio::buffer(read_buffer, read_header), error);
+            error_handle(error);
+            
+            int read_type = 0;
+            
+            std::memcpy(&read_type, read_buffer, 4);
+            
+            bool isFail = true;
+            
+            set_user_info set_user_info_cmd(read_buffer + 4, read_header - 4);
+            
+            if ( read_type == set_user_info::type ) {
 
-  void handle_read(const boost::system::error_code& error,
-      size_t bytes_transferred)
-  {
-    if (!error)
-    {
-      std::cout << "Reply: ";
-      std::cout.write(reply_, bytes_transferred);
-      std::cout << "\n";
-    }
-    else
-    {
-      std::cout << "Read failed: " << error.message() << "\n";
-    }
-  }
+            if ( set_user_info_cmd.get_id() < INT_MAX ){
+                 std::cout << "Test request_user_info service Ok." << std::endl;
+                isFail = false;
+            }
+               
+            }
+            
+            if ( isFail ){
+                std::cout << "Test request_user_info service Fail." << std::endl;
+            }
+            
+        }
+        //user_update_node 
+        {
+            client_node test_node(0);
+            
+            
+            user_update_node user_update_node_cmd(test_node);
+            
+            const int alloc_size = user_update_node_cmd.get_entire_size() + 4;
+            char *buffer = new char[alloc_size];
+            int type = user_update_node::type;
+            
+            std::memcpy(buffer, &type, 4);
+            
+            boost::system::error_code error;
+            
+            int header =  alloc_size;
+            
+            boost::asio::write(socket_, boost::asio::buffer(&header, 4),boost::asio::transfer_all(), error);
+            error_handle(error);
+            
+            user_update_node_cmd.serialize(buffer + 4);
+            
+            boost::asio::write(socket_, boost::asio::buffer(buffer, header), boost::asio::transfer_all(), error);
+            error_handle(error);
+            
+            int read_header;
+            
+            socket_.read_some(boost::asio::buffer(&read_header, 4), error);
+            error_handle(error);
+            
+            char *read_buffer = new char[read_header];
+            
+            socket_.read_some(boost::asio::buffer(read_buffer, read_header), error);
+            error_handle(error);
+            
+            int read_type = 0;
+            
+            std::memcpy(&read_type, read_buffer, 4);
+            
+            bool isFail = true;
+            
+            near_node_info near_node_info_cmd(read_buffer + 4, read_header - 4);
+            
+            if ( read_type == near_node_info::type ){
+                
+            if ( near_node_info_cmd.get_near_nodes().size() == 0 ){
+                std::cout << "Test user_update_node service Ok." << std::endl;
+                isFail = false;
+            }
+                
+            }
+            
+            if ( isFail ){
+                std::cout << "Test user_update_node service Fail." << std::endl;
+            }
+            
+        }
+        {
+            client_node test_node(0);
+            
+            std::string str = "1234";
+            
+            utf8_message_send utf8_message_send_cmd(0, 0, str);
+            
+            const int alloc_size = utf8_message_send_cmd.get_entire_size() + 4;
+            char *buffer = new char[alloc_size];
+            int type = utf8_message_send::type;
+            
+            std::memcpy(buffer, &type, 4);
+            
+            boost::system::error_code error;
+            
+            int header =  alloc_size;
+            
+            boost::asio::write(socket_, boost::asio::buffer(&header, 4),boost::asio::transfer_all(), error);
+            error_handle(error);
+            
+            utf8_message_send_cmd.serialize(buffer + 4);
+            
+            boost::asio::write(socket_, boost::asio::buffer(buffer, header), boost::asio::transfer_all(), error);
+            error_handle(error);
+            
+            int read_header;
+            
+            socket_.read_some(boost::asio::buffer(&read_header, 4), error);
+            error_handle(error);
+            
+            char *read_buffer = new char[read_header];
+            
+            socket_.read_some(boost::asio::buffer(read_buffer, read_header), error);
+            error_handle(error);
+            
+            int read_type = 0;
+            
+            std::memcpy(&read_type, read_buffer, 4);
+            
+            bool isFail = true;
+            
+            command_form_base command_form_base_cmd(read_buffer + 4, read_header - 4);
+            
+            if ( read_type == command_form_base::type ){
 
+                std::cout << "utf8_message_send service Ok." << std::endl;
+                isFail = false;
+
+                
+            }
+            
+            if ( isFail ){
+                std::cout << "utf8_message_send service Fail." << std::endl;
+            }
+            
+        }
+
+        std::cout << "End Test." << std::endl;
+
+    }
+
+    void error_handle(boost::system::error_code error)
+    {
+        
+        if ( error ) {
+            std::cout << "Test Fail Error :" << error.message() << std::endl;
+            
+        }
+        
+    }
 private:
   boost::asio::ssl::stream<boost::asio::ip::tcp::socket> socket_;
-  char request_[max_length];
-  char reply_[max_length];
+
 };
 
 
