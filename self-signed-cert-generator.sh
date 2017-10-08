@@ -13,4 +13,5 @@ cp server.crt server.crt.cpy
 mv server.crt ./build/debug/
 mv server.crt.cpy ./testclient/build/debug/server.crt
 mv dh2048.pem ./build/debug/
+rm server.csr
 echo "Done..."
