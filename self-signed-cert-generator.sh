@@ -8,6 +8,8 @@ openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
 echo "Generate dhparam file..."
 openssl dhparam -out dh2048.pem 2048 > /dev/null
 echo "Move all file."
+mkdir ./build/debug
+mkdir ./testclient/build/debug
 mv server.key ./build/debug/
 cp server.crt server.crt.cpy
 mv server.crt ./build/debug/
