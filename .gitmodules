@@ -1,0 +1,6 @@
+[submodule "ios_livemap_client_api"]
+	path = ios_livemap_client_api
+	url = https://github.com/interruping/ios_livemap_client_api.git
+[submodule "android_livemap_client_api"]
+	path = android_livemap_client_api
+	url = https://github.com/interruping/android_livemap_client_api.git

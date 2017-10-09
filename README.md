@@ -154,6 +154,15 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
  Ok표시가 3개보다 적거나 다른 오류 메시지가 표시될 때, LiveMapServer를 재빌드하거나
  libcommandbinder 동적라이브러리 빌드 여부를 확인해보십시오.
  
+ LiveMapClient API를 활용한 LiveMapServer 사용
+ ======================
+ 
+ LiveMapServer 프로젝트는 iOS와 Android 플랫폼에서 어플리케이션과 연동 가능한 API를 제공합니다.
+ iOS, Android 플랫폼 각각 별도의 repository를 가지고 있으면 LiveMapServer 프로젝트의 서브모듈로 등록되어있습니다.
+ 자세한 사용법은 해당 repository의 README 혹은 API 문서를 확인하십시오.
+ 
+ - [LiveMapClient iOS API Repository]()
+ - [LiveMapClient Android API Repository]()
 제한사항
 ===========
 - *Linux & Unix 계열의 OS*를 대상으로 작성되었습니다.
