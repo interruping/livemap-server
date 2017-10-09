@@ -161,8 +161,10 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
  iOS, Android 플랫폼 각각 별도의 repository를 가지고 있으면 LiveMapServer 프로젝트의 서브모듈로 등록되어있습니다.
  자세한 사용법은 해당 repository의 README 혹은 API 문서를 확인하십시오.
  
- - [LiveMapClient iOS API Repository]()
- - [LiveMapClient Android API Repository]()
+ - [LiveMapClient iOS API Repository](https://github.com/interruping/ios_livemap_client_api)
+ - [LiveMapClient Android API Repository](https://github.com/interruping/android_livemap_client_api)
+ 
+ 
 제한사항
 ===========
 - *Linux & Unix 계열의 OS*를 대상으로 작성되었습니다.
