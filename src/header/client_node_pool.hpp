@@ -29,6 +29,7 @@
 #include <memory>
 #include <functional>
 #include <mutex>
+#include <queue>
 
 #include "id_manager.hpp"
 #include "client_node.hpp"
@@ -58,7 +59,7 @@ namespace livemap {
         
 	private:
 		std::map<int, std::weak_ptr<client_node>> _node_container;
-        std::map<int, std::pair<int,std::string>> _node_msg_pool;
+        std::map<int, std::queue<std::pair<int, std::string>>> _node_msg_pool;
 	};
 }
 }

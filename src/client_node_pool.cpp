@@ -58,8 +58,14 @@ namespace livemap {
     
     void client_node_pool::save_msg(int sender_id, int receiver_id, std::string msg)
     {
-        _node_msg_pool.insert({receiver_id, std::make_pair(sender_id, msg)});
-        
+        auto iter = _node_msg_pool.find(receiver_id);
+        if ( iter ==  _node_msg_pool.cend() ) {
+            std::queue<std::pair<int, std::string>> msg_queue;
+            msg_queue.push(std::make_pair(sender_id, msg));
+            _node_msg_pool.insert(std::make_pair(receiver_id, msg_queue));
+        } else {
+            iter->second.push(std::make_pair(sender_id, msg));
+        }
     }
     
     bool client_node_pool::msg_check(int id)
@@ -77,10 +83,15 @@ namespace livemap {
     {
         
         auto search = _node_msg_pool.find(id);
-        _node_msg_pool.erase(id);
 
-        auto pair = search->second;
-        return std::make_pair(pair.first, pair.second);
+        int sender_id = search->second.front().first;
+        std::string msg = search->second.front().second;
+        search->second.pop();
+        
+        if ( search->second.size() == 0 ) {
+            _node_msg_pool.erase(id);
+        }
+        return std::make_pair(sender_id, msg);
     }
 }
 }
