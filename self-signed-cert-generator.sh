@@ -6,7 +6,7 @@ openssl req -new -key server.key -out server.csr
 echo "Sign certificate with private key..."
 openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
 echo "Generate dhparam file..."
-openssl dhparam -out dh2048.pem 1024 > /dev/null
+openssl dhparam -out dh2048.pem 2048 > /dev/null
 echo "Move all file."
 
 mkdir ./build > /dev/null
