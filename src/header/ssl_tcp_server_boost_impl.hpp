@@ -23,6 +23,12 @@
 
 #include "livemapserver_config.h"
 
+#ifdef _DEBUG_
+#include "debug_utility.hpp"
+#else
+#include "stdout_log_utility.hpp"
+#endif
+
 #include "boost_asio_helper.hpp"
 #include "server_base.hpp"
 

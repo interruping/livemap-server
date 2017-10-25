@@ -21,10 +21,16 @@
  @date Mar 31, 2017
  @version
 */
+#ifdef _DEBUG_
+#include "debug_utility.hpp"
+#else
+#include "stdout_log_utility.hpp"
+#endif
+
 
 #include "commandbinder.hpp"
-#include "debug_utility.hpp"
 #include "geo_calc_distance.h"
+
 #include <cstring>
 #include <iostream>
 
@@ -60,21 +66,28 @@ namespace livemap {
                                  char **result_buffer)
 	{
         std::shared_ptr<client_node> request_node_s = request_node.lock();
-        
+
         if ( request_node_s == nullptr ) {
             return 0;
         }
-        
-        printf("service type received -- %d\n", read_service_type(raw_request));
+#ifdef _DEBUG_
+        SC_DBGMSG("received service request -- service number: " << read_service_type(raw_request) << " from client_node id : " << request_node_s->get_id())
+#else
+        SC_STDOUTLOG("received service request -- service number: " << read_service_type(raw_request) << " from client_node id : " << request_node_s->get_id())
+#endif
 		switch(read_service_type(raw_request)){
             case request_user_info::type : {
-                
+#ifdef _DEBUG_
+                SC_DBGMSG("read request_user_info service")
+#else
+                SC_STDOUTLOG("read request_user_info service")
+#endif
                 common_id_type id = request_node_s->get_id();
 
                 set_user_info set_user_info_reply(id);
                 
                 *result_buffer = new char[set_user_info_reply.get_entire_size() + sizeof(command_type)];
-                
+
                 command_type type = set_user_info::type;
                 std::memcpy(*result_buffer, &type, sizeof(type));
                 
@@ -86,12 +99,28 @@ namespace livemap {
             }
             case user_viewpoint_update::type :
             case user_update_node::type : {
-                
+#ifdef _DEBUG_
+                SC_DBGMSG("read user_viewpoint_update service and user_update_node service")
+#else
+                SC_STDOUTLOG("read user_viewpoint_update service and user_update_node service")
+#endif
                 
                 if ( node_db.msg_check(request_node_s->get_id()) ) {
+                    
+#ifdef _DEBUG_
+                    SC_DBGMSG("received message detect")
+#else
+                    SC_STDOUTLOG("received message detect")
+#endif
+                    
                     auto sender_id_and_msg = node_db.get_msg(request_node_s->get_id());
                     utf8_message_send to_send_msg(sender_id_and_msg.first, request_node_s->get_id(), sender_id_and_msg.second);
-                    std::cout << "message_sended to " << request_node_s->get_id() << std::endl;
+                    
+#ifdef _DEBUG_
+                    SC_DBGMSG("message from client_node " << sender_id_and_msg.first << " : " << sender_id_and_msg.second << "(message length : " << sender_id_and_msg.second.length() <<")");
+#else
+                    SC_STDOUTLOG("message from client_node " << sender_id_and_msg.first << " : " << sender_id_and_msg.second << "(message length : " << sender_id_and_msg.second.length() <<")")
+#endif
                     int type = utf8_message_send::type;
                     *result_buffer = new char[to_send_msg.get_entire_size() + sizeof(command_type)];
                     std::memcpy(*result_buffer, &type, sizeof(command_type));
@@ -101,7 +130,7 @@ namespace livemap {
                     return to_send_msg.get_entire_size() + sizeof(command_type);
                     
                 }
-            
+
                 user_update_node recieve_command(raw_request + 4, raw_request_size);
                 client_node update_info = recieve_command.get_client_node_for_update();
                 request_node_s->set_coordinate(
@@ -121,7 +150,11 @@ namespace livemap {
                     user_viewpoint_update vp_update(raw_request + 4, raw_request_size);
                     request_node_coord = vp_update.get_viewpoint();
                 }
-                
+#ifdef _DEBUG_
+                SC_DBGMSG("update client_node " << request_node_s->get_id() << " coordinate latitude : " << request_node_coord.latitude << " -- longitude : " << request_node_coord.longitude )
+#else
+                SC_STDOUTLOG("update client_node " << request_node_s->get_id() << " coordinate latitude : " << request_node_coord.latitude << " -- longitude : " << request_node_coord.longitude)
+#endif
                 node_db.scan_all_nodes([&](std::weak_ptr<const client_node> other_node){
                     auto other_node_s = other_node.lock();
                     
@@ -162,11 +195,20 @@ namespace livemap {
                 break;
             }
             case utf8_message_send::type : {
+#ifdef _DEBUG_
+                SC_DBGMSG("read utf8_message_send service")
+#else
+                SC_STDOUTLOG("read utf8_message_send service")
+#endif
+                
                 utf8_message_send receive_msg(raw_request + 4, raw_request_size - 4);
                 node_db.save_msg(receive_msg.sender_id(), receive_msg.recv_id(), receive_msg.get_msg());
-                std::cout << "message_recieved from " << receive_msg.sender_id() << " to " << receive_msg.recv_id() << " msg : " << receive_msg.get_msg() << std::endl;
+
+#ifdef _DEBUG_
+                SC_DBGMSG("message to client_node " << receive_msg.recv_id() << " : " << receive_msg.get_msg() << "(message length : " << receive_msg.get_msg().length() <<")");
+#else
                 
-                
+#endif
                 *result_buffer = new char[4];
                 int type =command_form_base::type;
                 
@@ -175,13 +217,26 @@ namespace livemap {
                 return 4;
             }
             case command_form_base::type : {
-                
+#ifdef _DEBUG_
+                SC_DBGMSG("read command_form_base service")
+#else
+                SC_STDOUTLOG("read command_form_base service")
+#endif
                 if ( node_db.msg_check(request_node_s->get_id()) ) {
+#ifdef _DEBUG_
+                    SC_DBGMSG("received message detect")
+#else
+                    SC_STDOUTLOG("received message detect")
+#endif
+                    
                     auto sender_id_and_msg = node_db.get_msg(request_node_s->get_id());
                     utf8_message_send to_send_msg(sender_id_and_msg.first, request_node_s->get_id(), sender_id_and_msg.second);
                     
-                    std::cout << "message_sended to " << request_node_s->get_id() << std::endl;
-                    
+#ifdef _DEBUG_
+                    SC_DBGMSG("message from client_node " << sender_id_and_msg.first << " : " << sender_id_and_msg.second << "(message length : " << sender_id_and_msg.second.length() <<")");
+#else
+                    SC_STDOUTLOG("message from client_node " << sender_id_and_msg.first << " : " << sender_id_and_msg.second << "(message length : " << sender_id_and_msg.second.length() <<")")
+#endif
                     int type = utf8_message_send::type;
                     *result_buffer = new char[to_send_msg.get_entire_size() + sizeof(command_type)];
                     std::memcpy(*result_buffer, &type, sizeof(command_type));

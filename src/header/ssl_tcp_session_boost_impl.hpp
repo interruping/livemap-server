@@ -21,6 +21,13 @@
 #ifndef ssl_tcp_session_boost_impl_h
 #define ssl_tcp_session_boost_impl_h
 
+#ifdef _DEBUG_
+#include "debug_utility.hpp"
+#else
+#include "stdout_log_utility.hpp"
+#endif
+
+
 #include <functional>
 
 #include "livemapserver_config.h"
@@ -59,14 +66,18 @@ namespace livemap {
         , _expire_callback([](){})
         {
 #ifdef _DEBUG_
-            SC_DBGMSG("boost secure tcp session created.");
+            SC_DBGMSG("boost secure tcp session created.")
+#else
+            SC_STDOUTLOG("ssl session created")
 #endif
             
         }
         
         virtual ~ssl_tcp_session_boost_impl(){
 #ifdef _DEBUG_
-            SC_DBGMSG("session dtor called.");
+            SC_DBGMSG("session dtor called.")
+#else
+            SC_STDOUTLOG("session expired.")
 #endif
             this->stop();
             auto tmp_expire_callback = _expire_callback;

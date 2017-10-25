@@ -46,7 +46,9 @@ namespace livemap {
         
         _node_pool.register_node(new_client);
 #ifdef _DEBUG_
-        SC_DBGMSG("new id alloc to session id is " << new_id);
+        SC_DBGMSG("new id alloc to session id is " << new_id)
+#else
+        SC_STDOUTLOG("id " << new_id <<" assigned to session")
 #endif
         lock_for_id_manager_and_node_pool.unlock();
         
@@ -62,8 +64,11 @@ namespace livemap {
         new_session->set_expire_callback([this, new_id]{
             std::unique_lock<std::mutex> lock_for_id_manager_and_node_pool(_mutex_for_id_manager_and_node_pool);
 #ifdef _DEBUG_
-            SC_DBGMSG("id:" << new_id << " is returned by expired session");
+            SC_DBGMSG("id:" << new_id << " is returned by expired session")
+#else
+            SC_STDOUTLOG("session return id " << new_id )
 #endif
+            
             _id_manager.return_id(new_id);
             _node_pool.delete_node(new_id);
             lock_for_id_manager_and_node_pool.unlock();

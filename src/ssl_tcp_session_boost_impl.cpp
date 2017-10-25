@@ -28,7 +28,9 @@ namespace livemap {
         void ssl_tcp_session_boost_impl::start()
         {
 #ifdef _DEBUG_
-            SC_DBGMSG("session start.");
+            SC_DBGMSG("session start.")
+#else
+            SC_STDOUTLOG("session start.")
 #endif
             auto safe_start
             = _strand_for_session.wrap(boost::bind(&ssl_tcp_session_boost_impl::_unsafe_start,
@@ -60,7 +62,7 @@ namespace livemap {
         void ssl_tcp_session_boost_impl::_unsafe_start()
         {
 #ifdef _DEBUG_
-            SC_DBGMSG("session start handshake process.");
+            SC_DBGMSG("session start handshake process.")
 #endif
             std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
             
@@ -77,7 +79,7 @@ namespace livemap {
         void ssl_tcp_session_boost_impl::_unsafe_stop()
         {
 #ifdef _DEBUG_
-            SC_DBGMSG("session stop.");
+            SC_DBGMSG("session stop.")
 #endif
             
         }
@@ -87,11 +89,11 @@ namespace livemap {
             
             if ( error ) {
 #ifdef _DEBUG_
-                SC_DBGMSG("handshake fail. error:" << error.message() );
+                SC_DBGMSG("handshake fail. error:" << error.message() )
 #endif
             }
 #ifdef _DEBUG_
-            SC_DBGMSG("handshake complete start socket read.");
+            SC_DBGMSG("handshake complete start socket read.")
 #endif
             
             _io_trigger_timer.expires_from_now(boost::posix_time::milliseconds(LMS_CFG_RW_IO_INTERVAL_MILISECOND));
@@ -110,12 +112,15 @@ namespace livemap {
             
             if ( error ) {
 #ifdef _DEBUG_
-                SC_DBGMSG( "error occure before socket read process." << error.message() );
+                SC_DBGMSG( "error occure before socket read process." << error.message() )
+#else
+                SC_STDOUTLOG( "error occure before socket read process. error: " << error.message() )
 #endif
+
                 return;
             } else {
 #ifdef _DEBUG_
-                SC_DBGMSG( "read start socket read." );
+                SC_DBGMSG( "read start socket read." )
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 
@@ -167,13 +172,15 @@ namespace livemap {
         {
             if ( error ) {
 #ifdef _DEBUG_
-                SC_DBGMSG( "error occure before write process. error: " << error.message() );
-                
-                return;
+                SC_DBGMSG( "error occure before socket write process. error: " << error.message() )
+#else
+                SC_STDOUTLOG( "error occure before socket write process. error: " << error.message() )
 #endif
+                return;
+
             } else {
 #ifdef _DEBUG_
-                SC_DBGMSG( "start socket writes." );
+                SC_DBGMSG( "start socket writes." )
 #endif
                 std::shared_ptr<bst_ssl_tcp_socket> socket = std::static_pointer_cast<bst_ssl_tcp_socket>(get_socket());
                 

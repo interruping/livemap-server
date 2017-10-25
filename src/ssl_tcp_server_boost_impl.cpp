@@ -19,7 +19,6 @@
  */
 
 #include "ssl_tcp_server_boost_impl.hpp"
-#include "debug_utility.hpp"
 #include "tcp_session.hpp"
 
 #include <boost/bind.hpp>
@@ -37,7 +36,9 @@ namespace livemap {
         //에러검사
         if ( error ) {
 #ifdef _DEBUG_
-            SC_DBGMSG("error occure while acception process.");
+            SC_DBGMSG("error occure while acception process." << error.message())
+#else
+            SC_STDOUTLOG("error occure while acception process." << error.message())
 #endif
             //에러가 있을 시 에러 처리 위임
             _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_start_service, this)));
@@ -83,7 +84,9 @@ namespace livemap{
     , _thread_group()
     {
 #ifdef _DEBUG_
-        SC_DBGMSG("n/a.");
+        SC_DBGMSG("server create.")
+#else
+        SC_STDOUTLOG("server create.")
 #endif
         
         //ssl 셋팅.
@@ -112,7 +115,13 @@ namespace livemap{
     }
     
     ssl_tcp_server_boost_impl::~ssl_tcp_server_boost_impl() {
+
         _thread_group.join_all();
+#ifdef _DEBUG_
+        SC_DBGMSG("server stop and destroy.")
+#else
+        SC_STDOUTLOG("server destroy.")
+#endif
     }
     
     
@@ -120,7 +129,9 @@ namespace livemap{
     void ssl_tcp_server_boost_impl::start_service()
     {
 #ifdef _DEBUG_
-        SC_DBGMSG("request accept start.");
+        SC_DBGMSG("request accept start.")
+#else
+        SC_STDOUTLOG("server start with port 1212")
 #endif
         _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_start_service, this)));
     }
@@ -130,12 +141,12 @@ namespace livemap{
     void ssl_tcp_server_boost_impl::_unsafe_start_service()
     {
 #ifdef _DEBUG_
-        SC_DBGMSG("accepting start.");
+        SC_DBGMSG("accepting start.")
 #endif
         //accept 중단 플래그 검사
         if ( _is_stopped_accept == true ){
 #ifdef _DEBUG_
-            SC_DBGMSG("Catch stop flag. acception will be stopped.");
+            SC_DBGMSG("Catch stop flag. acception will be stopped.")
 #endif
             _is_stopped_accept = false;
             return;
@@ -158,7 +169,7 @@ namespace livemap{
     void ssl_tcp_server_boost_impl::stop_service()
     {
 #ifdef _DEBUG_
-        SC_DBGMSG("stop accept request.");
+        SC_DBGMSG("stop accept request.")
 #endif
         //중단 작업 함수 동기화 실행 요청
         _ios.post(_strand_for_acceptor.wrap(boost::bind(&ssl_tcp_server_boost_impl::_unsafe_stop_service, this)));
@@ -169,7 +180,7 @@ namespace livemap{
     void ssl_tcp_server_boost_impl::_unsafe_stop_service()
     {
 #ifdef _DEBUG_
-        SC_DBGMSG("stop accept flag set.");
+        SC_DBGMSG("stop accept flag set.")
 #endif
         //스탑 플래그 셋.
         _is_stopped_accept = true;

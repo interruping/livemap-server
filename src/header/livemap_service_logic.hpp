@@ -20,6 +20,12 @@
 #ifndef livemap_service_logic_h
 #define livemap_service_logic_h
 
+#ifdef _DEBUG_
+#include "debug_utility.hpp"
+#else
+#include "stdout_log_utility.hpp"
+#endif
+
 #include "livemapserver_config.h"
 
 #include <mutex>
