@@ -6,9 +6,6 @@ else ()
     set( CMAKE_BUILD_TYPE debug)
 endif(DEFINED CMAKE_BUILD_TYPE)
 
-#플러그인 라이브러리
-add_subdirectory( dylibsrc )
-
 #OpenSSL Setting
 
 if ( APPLE )
@@ -88,6 +85,8 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIVEMAP_SERVER_OUTPUT_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
+#플러그인 라이브러리
+add_subdirectory( dylibsrc )
 
 # 빌드 대상 바이너리 추가
 add_executable (${OUTPUT_ELF} ${LIVEMAP_CXX_SOURCES} ${LIVEMAP_INCLUDE_HEADERS})
