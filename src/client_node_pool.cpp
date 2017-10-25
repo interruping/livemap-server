@@ -44,7 +44,8 @@ namespace livemap {
 	/*! @breif 특정 노드를 삭제하는 구현*/
     void client_node_pool::delete_node(common_id_type delete_node_id)
 	{
-			_node_container.erase(delete_node_id);
+        _node_container.erase(delete_node_id);
+        _node_msg_pool.erase(delete_node_id);
 	}
 	/*! @breif 등록된 모든 노드를 한 번 씩 참조하는 구현*/
 	void client_node_pool::scan_all_nodes(std::function<void(std::weak_ptr<const client_node>)> callback)
