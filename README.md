@@ -143,22 +143,23 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
  ## 구동 및 테스트
  
      $ cd build/debug 또는 cd build/release (빌드타입에 맞게 선택)
-     $ ./server > livemap.log (실행)
+     $ ./server > livemap.log              (실행)
      Enter PEM pass phrase:[스크립트로 키파일 생성했을 경우, 스크립트에서 성절한 비밀번호 입력]
-     ^Z (Ctrl + Z로 잠시 Process 멈춤)
+     ^Z                    (Ctrl + Z로 잠시 Process 멈춤)
      [1]+  Stopped       ./server > livemap.log
-     $ bg 1 (백그라운드로 실행)
+     $ bg 1    (백그라운드로 실행; server 프로세스 멈췄을 때 [n]+ Stopped 메시지에서 n값을 bg명령어 뒤 입력)
      $ cd ../../testclient
      $ cmake .
      $ make
      $ cd build/debug
-     $ ./testclient localhost 1212 (테스트 클라이언트 실행)
+     $ ./test_client localhost 1212       (테스트 클라이언트 실행)
      Verifying [인증서 정보]
      Start test.
      Test request_user_info service Ok.
      Test user_update_node service Ok.
      utf8_message_send service Ok.
      End Test.
+     (끝)
      
  위와 같이 테스트 클라이언트를 실행했을 때 3개의 Ok가 나오면 테스트 성공입니다.
  Ok표시가 3개보다 적거나 다른 오류 메시지가 표시될 때, LiveMapServer를 재빌드하거나
