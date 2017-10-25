@@ -110,7 +110,6 @@ BUILD.md에 명시된 방법으로 빌드를 실패하거나 오류가 발생한
     $ ls libcommandbinder.*
     libcommandbinder.so 또는 libcommandbinder.dylib
     
-## 테스트용 클라이언트 빌드 & 테스트
 
     
 

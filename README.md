@@ -78,6 +78,9 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
 
 ####  [self-signed-cert-generator.sh](https://github.com/interruping/livemap-server/blob/Develop/self-signed-cert-generator.sh)스크립트 실행
 
+아래와 동일하게 step-by-step으로 진행, 대괄호로 설명된 부분은 *ex ) "[ XXX 입력]"* 사용자가 직접 입력해야합니다.
+*!주의사항!* - 개인키 보호 비밀번호는 총 4회 똑같은 비밀번호로 입력해야 합니다. 한 번이라도 틀렸을 경우 반드시 스크립트를 재실행해야합니다.
+
     $ bash self-signed-cert-generator.sh
     Generate private key...
     Generating RSA private key, 1024 bit long modulus
@@ -125,18 +128,21 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
 ####  [self-signed-cert-generator.sh](https://github.com/interruping/livemap-server/blob/Develop/self-signed-cert-generator.sh) 실행 완료 후 결과물
 
 - build/debug/server.crt
+- build/release/server.crt
 - testclient/debug/server.crt ( 위 파일과 동일 ; 테스트 클라이언트를 위한 인증서  )
 - build/debug/server.key
+- build/release/server.key
 - build/debug/dh2048.pem
+- build/release/dh2048.pem
 
 *! 주의사항 !*
 [self-signed-cert-generator.sh](https://github.com/interruping/livemap-server/blob/Develop/self-signed-cert-generator.sh) 을 실행하여 생성된 인증서와 키파일들의 경로는
  [livemapserver_config.h.in](https://github.com/interruping/livemap-server/blob/Develop/livemapserver_config.h.in) 파일에 디폴트 값으로 설정되어 있습니다.
- 따라서  [livemapserver_config.h.in](https://github.com/interruping/livemap-server/blob/Develop/livemapserver_config.h.in) 파일에 별도의 설정을 하면 안됩니다.
+ 따라서  스크립트로 생성된 인증서와 키파일을 사용하려 한다면,  [livemapserver_config.h.in](https://github.com/interruping/livemap-server/blob/Develop/livemapserver_config.h.in) 파일에 별도의 설정을 하면 안됩니다.
  
  ## 구동 및 테스트
  
-     $ cd build/debug
+     $ cd build/debug 또는 cd build/release (빌드타입에 맞게 선택)
      $ ./server & (백그라운드 실행)
      $ cd ../../testclient
      $ cmake .
