@@ -143,7 +143,11 @@ LiveMapServer 프로젝트는 테스트를 위한 Self-Signed 인증서와 필�
  ## 구동 및 테스트
  
      $ cd build/debug 또는 cd build/release (빌드타입에 맞게 선택)
-     $ ./server & (백그라운드 실행)
+     $ ./server > livemap.log (실행)
+     Enter PEM pass phrase:[스크립트로 키파일 생성했을 경우, 스크립트에서 성절한 비밀번호 입력]
+     ^Z (Ctrl + Z로 잠시 Process 멈춤)
+     [1]+  Stopped       ./server > livemap.log
+     $ bg 1 (백그라운드로 실행)
      $ cd ../../testclient
      $ cmake .
      $ make
